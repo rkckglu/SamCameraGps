@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="tr" data-dil="tr" data-tema="koyu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SAM Camera GPS — Gizlilik Politikası</title>
+<meta name="description" content="SAM Camera GPS gizlilik politikası: hesap yok, sunucu yok, reklam yok. Fotoğraflar, konumlar ve raporlar yalnızca telefonunuzda, seçtiğiniz klasörde kalır.">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0C1F42">
+<!--
+  Play Console > Uygulama icerigi > Gizlilik politikasi alanina bu sayfanin adresi yazilir:
+  https://<kullanici>.github.io/<depo>/gizlilik.html   (Ingilizce: ...gizlilik.html?lang=en)
+-->
+<style>
+:root{--sari:#F5C518;--lacivert:#0C1F42;--yesil:#059669;--kirmizi:#DC2626;--r:16px}
+html[data-tema="koyu"]{--zemin:#0B0F12;--yuzey:#151A1F;--yuzey2:#1D242B;--cizgi:#2A333B;--metin:#ECEFF2;--govde:#C9D3DC;--solgun:#94A3AF;--vurgu:#F5C518;--ust:rgba(11,15,18,.85);--yesilA:#34D399}
+html[data-tema="acik"]{--zemin:#F6F7F9;--yuzey:#FFFFFF;--yuzey2:#F1F3F6;--cizgi:#E2E6EB;--metin:#111827;--govde:#374151;--solgun:#6B7280;--vurgu:#0C1F42;--ust:rgba(246,247,249,.88);--yesilA:#059669}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;overflow-x:hidden;background:var(--zemin);color:var(--metin);font:16px/1.7 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+a{color:var(--vurgu);text-underline-offset:3px}
+html[data-dil="tr"] [lang="en"]:not(html), html[data-dil="en"] [lang="tr"]:not(html){display:none!important}
+
+header{position:sticky;top:0;z-index:10;background:var(--ust);backdrop-filter:blur(12px);border-bottom:1px solid var(--cizgi)}
+header .kap{display:flex;align-items:center;gap:12px;height:62px}
+.kap{max-width:980px;margin:0 auto;padding:0 22px}
+.marka{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--metin);text-decoration:none;min-width:0}
+.marka img{width:32px;height:32px;border-radius:8px;flex:0 0 auto}
+.marka span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.araclar{margin-left:auto;display:flex;gap:8px;align-items:center}
+.secici{display:flex;border:1px solid var(--cizgi);border-radius:999px;overflow:hidden}
+.secici button{background:none;border:0;color:var(--solgun);font:700 13px system-ui,sans-serif;padding:7px 11px;cursor:pointer}
+.secici button[aria-pressed="true"]{background:var(--sari);color:#111}
+
+.bas{padding:56px 0 26px}
+.etiket{display:inline-flex;gap:8px;align-items:center;font-size:12.5px;font-weight:800;color:var(--vurgu);letter-spacing:1.3px;text-transform:uppercase}
+.etiket::before{content:"";width:22px;height:2px;background:currentColor}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.1;margin:12px 0 14px;letter-spacing:-.4px}
+.giris{font-size:18px;color:var(--govde);max-width:720px;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--solgun);font-size:14px;margin-top:16px}
+
+.vurgular{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:30px 0 8px}
+@media (max-width:820px){.vurgular{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.vurgular{grid-template-columns:1fr}}
+.vurgular div{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:var(--r);padding:16px}
+.vurgular b{display:flex;align-items:center;gap:8px;font-size:15.5px}
+.vurgular b::before{content:"✓";display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(52,211,153,.15);color:var(--yesilA);font-size:13px}
+.vurgular small{display:block;color:var(--solgun);font-size:13.5px;margin-top:4px;line-height:1.5}
+
+.duzen{display:grid;grid-template-columns:230px 1fr;gap:36px;align-items:start;padding:26px 0 40px}
+@media (max-width:860px){.duzen{grid-template-columns:1fr}}
+.duzen>*{min-width:0}
+nav.icindekiler{position:sticky;top:84px;background:var(--yuzey);border:1px solid var(--cizgi);border-radius:var(--r);padding:16px 14px}
+@media (max-width:860px){nav.icindekiler{position:static}}
+nav.icindekiler h2{font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--solgun);margin:0 0 8px}
+nav.icindekiler ol{margin:0;padding-left:22px;font-size:14.5px}
+nav.icindekiler li{margin:3px 0}
+nav.icindekiler a{color:var(--govde);text-decoration:none}
+nav.icindekiler a:hover{color:var(--vurgu)}
+
+article section{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:var(--r);padding:24px 26px;margin-bottom:14px}
+@media (max-width:480px){article section{padding:18px 16px}}
+article h2{font-size:21px;margin:0 0 10px;display:flex;gap:10px;align-items:baseline}
+article h2 .no{color:var(--vurgu);font-variant-numeric:tabular-nums;font-size:15px;font-weight:900;min-width:26px}
+article h3{font-size:16.5px;margin:18px 0 4px}
+article p,article li{color:var(--govde)}
+article p{margin:8px 0}
+article ul{padding-left:20px;margin:8px 0}
+article li{margin:4px 0}
+.tablo{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+th{text-align:left;color:var(--solgun);font-size:12.5px;letter-spacing:.8px;text-transform:uppercase;font-weight:800;padding:8px 10px;border-bottom:1px solid var(--cizgi)}
+td{padding:10px;border-bottom:1px solid var(--cizgi);vertical-align:top;color:var(--govde)}
+td:first-child{color:var(--metin);font-weight:700;white-space:nowrap}
+.cip{display:inline-block;font-size:12px;font-weight:800;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.cip.cihaz{background:rgba(52,211,153,.14);color:var(--yesilA)}
+.cip.google{background:rgba(96,165,250,.16);color:#60A5FA}
+html[data-tema="acik"] .cip.google{color:#1D4ED8}
+code{font:13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--yuzey2);border:1px solid var(--cizgi);border-radius:6px;padding:1px 6px;color:var(--metin)}
+.not.uyari{border-left-color:#DC2626;background:rgba(220,38,38,.10);color:var(--metin)}
+.not{border-left:3px solid var(--vurgu);background:var(--yuzey2);border-radius:0 10px 10px 0;padding:10px 14px;margin:12px 0;color:var(--govde)}
+
+footer{border-top:1px solid var(--cizgi);padding:26px 0 36px;color:var(--solgun);font-size:14px}
+footer .kap{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
+@media print{header,nav.icindekiler{display:none}.duzen{display:block}article section{break-inside:avoid;border:0;padding:0}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kap">
+    <a class="marka" href="index.html"><img src="icon.png" alt="" width="32" height="32"><span>SAM Camera GPS</span></a>
+    <div class="araclar">
+      <div class="secici" role="group" aria-label="Dil / Language">
+        <button type="button" data-dil="tr" aria-pressed="true">TR</button>
+        <button type="button" data-dil="en" aria-pressed="false">EN</button>
+      </div>
+      <div class="secici" role="group" aria-label="Tema / Theme">
+        <button type="button" data-tema="koyu" aria-pressed="true" title="Koyu / Dark">☾</button>
+        <button type="button" data-tema="acik" aria-pressed="false" title="Açık / Light">☀</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="kap">
+
+<!-- =================================================================== TURKCE -->
+<div lang="tr">
+  <div class="bas">
+    <span class="etiket">SAM Camera GPS</span>
+    <h1>Gizlilik Politikası</h1>
+    <p class="giris">SAM Camera GPS; bakım, arıza ve montaj işlerinde konum ve zaman damgalı fotoğraf çekmek, çekim listesine göre çalışmak ve saha raporu hazırlamak için tasarlanmış bir Android uygulamasıdır. Bu sayfa, uygulamanın hangi bilgileri neden kullandığını ve bu bilgilerin nerede durduğunu açıklar.</p>
+    <div class="meta"><span>Yürürlük tarihi: <b>24 Kasım 2026</b></span><span>Uygulama kimliği: <code>com.samcameragps.app</code></span><span>Sürüm: 1.0.0</span></div>
+    <div class="vurgular">
+      <div><b>Hesap yok</b><small>Kayıt, giriş ya da kullanıcı profili yoktur.</small></div>
+      <div><b>Sunucumuz yok</b><small>Fotoğraf, konum ve raporlarınız bize hiç gelmez.</small></div>
+      <div><b>Reklam ve takip yok</b><small>Reklam, analitik ya da hata raporlama aracı yoktur.</small></div>
+      <div><b>Paylaşım sizde</b><small>Bir şey yalnızca siz “Paylaş” derseniz dışarı çıkar.</small></div>
+    </div>
+  </div>
+
+  <div class="duzen">
+    <nav class="icindekiler" aria-label="Bu sayfada">
+      <h2>Bu sayfada</h2>
+      <ol>
+        <li><a href="#tr-kisaca">Kısaca</a></li>
+        <li><a href="#tr-izinler">İzinler ve kullanım</a></li>
+        <li><a href="#tr-veriler">Verileriniz nerede</a></li>
+        <li><a href="#tr-internet">İnternet kullanımı</a></li>
+        <li><a href="#tr-ucuncu">Üçüncü taraf servisler</a></li>
+        <li><a href="#tr-reklam">Reklam ve satın alma</a></li>
+        <li><a href="#tr-paylasim">Paylaşım</a></li>
+        <li><a href="#tr-saklama">Saklama ve silme</a></li>
+        <li><a href="#tr-guvenlik">Güvenlik</a></li>
+        <li><a href="#tr-cocuklar">Çocuklar</a></li>
+        <li><a href="#tr-haklar">Haklarınız</a></li>
+        <li><a href="#tr-sorumluluk">Sorumluluk reddi ve kabul</a></li>
+        <li><a href="#tr-degisiklik">Değişiklikler</a></li>
+        <li><a href="#tr-iletisim">İletişim</a></li>
+      </ol>
+    </nav>
+
+    <article>
+      <section id="tr-kisaca"><h2><span class="no">01</span>Kısaca</h2>
+        <ul>
+          <li>Uygulama tamamen telefonunuzda çalışır. Fotoğraf, video ve raporlar yalnızca sizin seçtiğiniz klasöre kaydedilir.</li>
+          <li>Geliştiricinin bir sunucusu yoktur; hiçbir veri geliştiriciye gönderilmez.</li>
+          <li>İnternet yalnızca damgadaki adresi bulmak için kullanılır ve bu istekte sadece koordinatlar gider. İnternet yoksa uygulama yine çalışır, damgada adres yerine koordinat görünür.</li>
+          <li>Reklam yoktur, uygulama içi satın alma yoktur, kullanım takibi yapılmaz.</li>
+        </ul>
+      </section>
+
+      <section id="tr-izinler"><h2><span class="no">02</span>İzinler ve kullanım</h2>
+        <p>İzinler, ilgili özellik kullanılmadan önce istenir. Bir izni vermezseniz yalnızca o özellik çalışmaz; kamera izni ise uygulamanın temel işlevi için gereklidir.</p>
+        <div class="tablo"><table>
+          <thead><tr><th>İzin</th><th>Ne için</th><th>Veri nereye gider</th></tr></thead>
+          <tbody>
+            <tr><td>Kamera</td><td>Fotoğraf ve video çekmek, barkod/QR okumak</td><td><span class="cip cihaz">Telefonda kalır</span></td></tr>
+            <tr><td>Konum</td><td>Damgaya koordinat, adres, rakım ve yön yazmak; klasöre saha konumunu kaydetmek; yakındaki sahaları ve “Sahada mısın?” sorusunu göstermek</td><td><span class="cip cihaz">Telefonda kalır</span> · adres için yalnız koordinat <span class="cip google">Google'a gider</span></td></tr>
+            <tr><td>Mikrofon</td><td>Yalnızca video kaydında ses almak (ilk video çekiminde istenir)</td><td><span class="cip cihaz">Telefonda kalır</span></td></tr>
+            <tr><td>Klasör erişimi</td><td>Fotoğrafları, iş kayıtlarını ve raporları sizin seçtiğiniz kayıt klasörüne yazmak</td><td><span class="cip cihaz">Telefonda kalır</span></td></tr>
+            <tr><td>Fotoğraf seçici</td><td>Galeriden sizin seçtiğiniz fotoğrafları bir maddeye eklemek (izin gerekmez; yalnızca seçtikleriniz okunur)</td><td><span class="cip cihaz">Telefonda kalır</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="not">Konum yalnızca uygulama açık ve ekrandayken kullanılır. Arka planda konum alınmaz, konum geçmişi tutulmaz. Damgada hangi konum bilgilerinin görüneceğini şablon ayarlarından siz seçersiniz.</div>
+      </section>
+
+      <section id="tr-veriler"><h2><span class="no">03</span>Verileriniz nerede</h2>
+        <p>İlk açılışta bir kayıt klasörü seçersiniz. Uygulamanın ürettiği her şey ya bu klasörde ya da uygulamanın kendi telefon içi alanında durur:</p>
+        <div class="tablo"><table>
+          <thead><tr><th>Veri</th><th>Nerede</th><th>Not</th></tr></thead>
+          <tbody>
+            <tr><td>Fotoğraf ve videolar</td><td>Kayıt klasörü (saha klasörleri)</td><td>Damga ve dosya adı ayarlarınıza göre</td></tr>
+            <tr><td>İş kaydı</td><td>İlgili saha klasöründe gizli <code>.bakim</code> dosyası</td><td>Maddeler, cevaplar, notlar, ölçümler, bulgular</td></tr>
+            <tr><td>Saha konumu</td><td>İlgili saha klasöründe gizli <code>.konum</code> dosyası</td><td>Yalnızca koordinat ve adres</td></tr>
+            <tr><td>Raporlar (PDF, HTML, ZIP)</td><td>Paylaşım için telefonun geçici (önbellek) alanında</td><td>Ara dosyalar hemen silinir; önbelleği Android da gerektiğinde temizler</td></tr>
+            <tr><td>Ayar yedeği</td><td>Kayıt klasöründe gizli <code>.ayaryedek</code> dosyası</td><td>Çekim listeleri, şablonlar, iş türleri; uygulama yeniden kurulunca geri yüklenebilsin diye</td></tr>
+            <tr><td>Ayarlar, klasör özeti, olay günlüğü</td><td>Uygulamanın telefon içi alanı</td><td>Uygulama kaldırılınca silinir</td></tr>
+          </tbody>
+        </table></div>
+        <p>Bu dosyaların hiçbiri geliştiriciye gönderilmez.</p>
+      </section>
+
+      <section id="tr-internet"><h2><span class="no">04</span>İnternet kullanımı</h2>
+        <p>Uygulamanın tek internet kullanımı, damgadaki adres yazısı için yapılan <b>ters coğrafi kodlamadır</b>: GPS koordinatları sokak, ilçe ve şehir adına çevrilir. Bu istek telefonun kendi adres servisi (Android Geocoder, çoğu cihazda Google Play Hizmetleri) üzerinden yapılır ve içinde <b>yalnızca koordinatlar</b> bulunur; klasör adı, fotoğraf ya da başka bir bilgi gönderilmez.</p>
+        <p>“Konuma git” dediğinizde harita uygulamanıza yalnızca koordinat iletilir. Rapor sayfası (HTML) da dışarıya hiçbir istek atmaz; internetsiz açılır.</p>
+      </section>
+
+      <section id="tr-ucuncu"><h2><span class="no">05</span>Üçüncü taraf servisler</h2>
+        <h3>Google Play Hizmetleri — konum ve adres</h3>
+        <p>Konumun bulunması ve koordinatların adrese çevrilmesi telefonunuzun Google Play Hizmetleri tarafından yapılır. Bu servis Google'ın kendi gizlilik politikasına tabidir.</p>
+        <h3>Google ML Kit — barkod okuma</h3>
+        <p>Barkod ve QR kodlar telefonun içinde, ML Kit ile okunur. Kamera görüntüsü hiçbir yere gönderilmez.</p>
+        <h3>Olmayanlar</h3>
+        <p>Uygulamada reklam ağı, analitik, hata raporlama (crash reporting), sosyal giriş ya da bulut depolama servisi yoktur.</p>
+      </section>
+
+      <section id="tr-reklam"><h2><span class="no">06</span>Reklam ve satın alma</h2>
+        <p>Uygulamada reklam gösterilmez ve reklam kimliği kullanılmaz. Uygulama içi satın alma yoktur. İleride ücretli bir sürüm ya da özellik eklenirse bu sayfa güncellenir ve değişiklik uygulama içinde duyurulur.</p>
+      </section>
+
+      <section id="tr-paylasim"><h2><span class="no">07</span>Paylaşım</h2>
+        <p>Raporlar, fotoğraflar, konumlar, çekim listeleri ve yedekler yalnızca siz <b>Paylaş</b> dediğinizde, Android paylaşım ekranından seçtiğiniz uygulamaya (e-posta, mesajlaşma, Drive vb.) gönderilir. Paylaştığınız içerikte klasör/saha adı, konum, damga bilgileri ve cevaplarınız bulunur. Dosya başka bir uygulamaya geçtikten sonra o uygulamanın gizlilik koşulları geçerlidir.</p>
+        <p>Çekim listesi dosyası yalnızca liste yapısını (maddeler, sorular, ayarlar) içerir; fotoğraf ya da iş kaydı içermez.</p>
+      </section>
+
+      <section id="tr-saklama"><h2><span class="no">08</span>Saklama ve silme</h2>
+        <ul>
+          <li>Geliştirici hiçbir veri tutmadığı için geliştirici tarafında silinecek bir şey yoktur.</li>
+          <li>Fotoğraf, video ve iş kayıtlarınız siz silene kadar kayıt klasörünüzde kalır. Uygulama içinden klasör ya da dosya silerken her seferinde onay istenir.</li>
+          <li>Uygulama kaldırıldığında uygulamanın telefon içi alanındaki ayarlar, özetler ve önbellek silinir; kayıt klasörünüzdeki dosyalar sizin dosyalarınız olduğu için yerinde kalır.</li>
+          <li>Rapor hazırlarken oluşan ara dosyalar silinir; paylaşım dosyaları önbellekte durur ve Android tarafından ya da uygulama kaldırılınca temizlenir.</li>
+        </ul>
+      </section>
+
+      <section id="tr-guvenlik"><h2><span class="no">09</span>Güvenlik</h2>
+        <p>Verileriniz telefonunuzun ve Android'in sağladığı koruma altındadır; uygulama veriyi ağ üzerinden taşımadığı için aktarım sırasında bir risk oluşmaz. Telefonunuzu ekran kilidiyle korumanızı ve paylaştığınız dosyaların kime gittiğine dikkat etmenizi öneririz.</p>
+      </section>
+
+      <section id="tr-cocuklar"><h2><span class="no">10</span>Çocuklar</h2>
+        <p>SAM Camera GPS profesyonel saha kullanımı için tasarlanmıştır ve çocuklara yönelik değildir. Uygulama hiç kimseden bilerek kişisel veri toplamaz.</p>
+      </section>
+
+      <section id="tr-haklar"><h2><span class="no">11</span>Haklarınız</h2>
+        <p>Geliştiricinin sunucusu ve sizinle ilgili bir kaydı olmadığından erişim, düzeltme, silme ya da taşıma taleplerinin (KVKK, GDPR) geliştirici tarafında bir konusu yoktur; verilerinizin tamamı zaten sizin elinizdedir. Bu nedenle erişim, düzeltme, silme ve taşınabilirlik talepleri bize yöneltilecek bir konu oluşturmaz. İzinleri dilediğiniz zaman telefonun <b>Ayarlar → Uygulamalar → SAM Camera GPS → İzinler</b> bölümünden geri alabilirsiniz.</p>
+      </section>
+
+      <section id="tr-sorumluluk"><h2><span class="no">12</span>Sorumluluk reddi ve kabul</h2>
+        <div class="not uyari"><b>Önemli:</b> Bu koşulları kabul etmiyorsanız uygulamayı kullanmayın ve telefonunuzdan kaldırın. Uygulamayı kurmanız ya da kullanmanız, bu sayfadaki koşulların tamamını kabul ettiğiniz anlamına gelir.</div>
+        <ul>
+          <li>SAM Camera GPS <b>“olduğu gibi”</b> ve <b>“mevcut haliyle”</b> sunulur. Uygulamanın hatasız, kesintisiz ya da belirli bir amaca uygun çalışacağı konusunda açık veya örtülü hiçbir garanti verilmez.</li>
+          <li>Damgadaki konum, adres, saat, rakım ve yön bilgileri telefonun GPS'ine, saatine ve adres servisine dayanır; hatalı ya da eksik olabilir. Fotoğrafların, raporların, ölçümlerin, bulguların ve saha puanlarının doğruluğunu kontrol etmek, bunlara dayanarak verilen kararlar ve bunların sonuçları <b>tamamen kullanıcının sorumluluğundadır</b>.</li>
+          <li>Verilerin (fotoğraf, video, iş kaydı, rapor) yedeklenmesi kullanıcının sorumluluğundadır. Telefonun kaybolması, bozulması, uygulamanın kaldırılması, dosyaların silinmesi ya da başka bir nedenle oluşabilecek veri kaybından geliştirici sorumlu değildir.</li>
+          <li>Paylaştığınız dosyaların kime gittiği, içerdiği kişisel veya ticari bilgiler ve fotoğraf çekilen yerlerde gerekli izinlerin alınması kullanıcının sorumluluğundadır.</li>
+          <li>Yürürlükteki mevzuatın izin verdiği en geniş ölçüde, geliştirici; uygulamanın kullanımından ya da kullanılamamasından doğan doğrudan veya dolaylı hiçbir zarar, kayıp, kâr kaybı, iş kaybı, ceza ya da talepten sorumlu tutulamaz ve geliştiriciye karşı bu nedenlerle herhangi bir talepte bulunulamaz.</li>
+          <li>Uygulama bir iş güvenliği, mühendislik ya da denetim aracının yerini tutmaz; sahadaki teknik kararlar yetkili kişilerce verilmelidir.</li>
+        </ul>
+      </section>
+
+      <section id="tr-degisiklik"><h2><span class="no">13</span>Değişiklikler</h2>
+        <p>Yeni özellikler eklendikçe bu politika güncellenebilir. Önemli değişikliklerde yürürlük tarihi yenilenir ve değişiklik uygulama içinde duyurulur. Geçerli sürümün yürürlük tarihi: <b>24 Kasım 2026</b>.</p>
+      </section>
+
+      <section id="tr-iletisim"><h2><span class="no">14</span>İletişim</h2>
+        <p>Uygulama: <b>SAM Camera GPS</b><br>E-posta: <a href="mailto:rkckglu@gmail.com">rkckglu@gmail.com</a></p>
+      </section>
+    </article>
+  </div>
+</div>
+
+<!-- =================================================================== ENGLISH -->
+<div lang="en">
+  <div class="bas">
+    <span class="etiket">SAM Camera GPS</span>
+    <h1>Privacy Policy</h1>
+    <p class="giris">SAM Camera GPS is an Android app for taking location- and time-stamped photos, working through shot lists and preparing site reports for maintenance, fault and installation jobs. This page explains what information the app uses, why, and where it is kept.</p>
+    <div class="meta"><span>Effective date: <b>24 November 2026</b></span><span>App ID: <code>com.samcameragps.app</code></span><span>Version: 1.0.0</span></div>
+    <div class="vurgular">
+      <div><b>No account</b><small>No sign-up, login or user profile.</small></div>
+      <div><b>No servers</b><small>Your photos, locations and reports never reach us.</small></div>
+      <div><b>No ads or tracking</b><small>No advertising, analytics or crash-reporting tools.</small></div>
+      <div><b>You control sharing</b><small>Nothing leaves your phone unless you tap “Share”.</small></div>
+    </div>
+  </div>
+
+  <div class="duzen">
+    <nav class="icindekiler" aria-label="On this page">
+      <h2>On this page</h2>
+      <ol>
+        <li><a href="#en-short">In short</a></li>
+        <li><a href="#en-permissions">Permissions and use</a></li>
+        <li><a href="#en-data">Where your data lives</a></li>
+        <li><a href="#en-internet">Internet use</a></li>
+        <li><a href="#en-third">Third-party services</a></li>
+        <li><a href="#en-ads">Advertising and purchases</a></li>
+        <li><a href="#en-sharing">Sharing</a></li>
+        <li><a href="#en-retention">Retention and deletion</a></li>
+        <li><a href="#en-security">Security</a></li>
+        <li><a href="#en-children">Children</a></li>
+        <li><a href="#en-rights">Your rights</a></li>
+        <li><a href="#en-disclaimer">Disclaimer and acceptance</a></li>
+        <li><a href="#en-changes">Changes</a></li>
+        <li><a href="#en-contact">Contact</a></li>
+      </ol>
+    </nav>
+
+    <article>
+      <section id="en-short"><h2><span class="no">01</span>In short</h2>
+        <ul>
+          <li>The app runs entirely on your phone. Photos, videos and reports are saved only to the folder you choose.</li>
+          <li>The developer has no servers; no data is ever sent to the developer.</li>
+          <li>The internet is used only to look up the address shown on the stamp, and only coordinates are sent. Without internet the app still works and the stamp shows coordinates instead of an address.</li>
+          <li>There are no ads, no in-app purchases and no usage tracking.</li>
+        </ul>
+      </section>
+
+      <section id="en-permissions"><h2><span class="no">02</span>Permissions and use</h2>
+        <p>Permissions are requested before the related feature is used. If you decline one, only that feature stops working; the camera permission is required for the app's core function.</p>
+        <div class="tablo"><table>
+          <thead><tr><th>Permission</th><th>Purpose</th><th>Where the data goes</th></tr></thead>
+          <tbody>
+            <tr><td>Camera</td><td>Taking photos and videos, scanning barcodes/QR codes</td><td><span class="cip cihaz">Stays on device</span></td></tr>
+            <tr><td>Location</td><td>Writing coordinates, address, altitude and heading on the stamp; saving a site location for a folder; showing nearby sites and the “Are you on site?” prompt</td><td><span class="cip cihaz">Stays on device</span> · for the address, only coordinates <span class="cip google">go to Google</span></td></tr>
+            <tr><td>Microphone</td><td>Recording sound with videos only (asked on the first video)</td><td><span class="cip cihaz">Stays on device</span></td></tr>
+            <tr><td>Folder access</td><td>Writing photos, job records and reports to the save folder you choose</td><td><span class="cip cihaz">Stays on device</span></td></tr>
+            <tr><td>Photo picker</td><td>Adding photos you pick from your gallery to an item (no permission needed; only the photos you pick are read)</td><td><span class="cip cihaz">Stays on device</span></td></tr>
+          </tbody>
+        </table></div>
+        <div class="not">Location is used only while the app is open and on screen. It is never collected in the background and no location history is kept. You choose which location details appear on the stamp in the template settings.</div>
+      </section>
+
+      <section id="en-data"><h2><span class="no">03</span>Where your data lives</h2>
+        <p>On first launch you choose a save folder. Everything the app creates is kept either in that folder or in the app's private storage on your phone:</p>
+        <div class="tablo"><table>
+          <thead><tr><th>Data</th><th>Where</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Photos and videos</td><td>Save folder (site folders)</td><td>Per your stamp and file-name settings</td></tr>
+            <tr><td>Job record</td><td>Hidden <code>.bakim</code> file in the site folder</td><td>Items, answers, notes, measurements, findings</td></tr>
+            <tr><td>Site location</td><td>Hidden <code>.konum</code> file in the site folder</td><td>Coordinates and address only</td></tr>
+            <tr><td>Reports (PDF, HTML, ZIP)</td><td>Phone's temporary (cache) storage for sharing</td><td>Intermediate files are deleted right away; Android also clears the cache when needed</td></tr>
+            <tr><td>Settings backup</td><td>Hidden <code>.ayaryedek</code> file in the save folder</td><td>Shot lists, templates, job types; so they can be restored after reinstalling</td></tr>
+            <tr><td>Settings, folder index, event log</td><td>App's private storage</td><td>Removed when the app is uninstalled</td></tr>
+          </tbody>
+        </table></div>
+        <p>None of these files are ever sent to the developer.</p>
+      </section>
+
+      <section id="en-internet"><h2><span class="no">04</span>Internet use</h2>
+        <p>The app's only internet use is <b>reverse geocoding</b> for the address on the stamp: GPS coordinates are turned into a street, district and city. The request goes through your phone's own address service (Android Geocoder, Google Play services on most devices) and contains <b>only the coordinates</b>; no folder name, photo or other information is sent.</p>
+        <p>When you tap “Go to location”, only coordinates are passed to your map app. The web report (HTML) makes no outside requests and opens offline.</p>
+      </section>
+
+      <section id="en-third"><h2><span class="no">05</span>Third-party services</h2>
+        <h3>Google Play services — location and address</h3>
+        <p>Finding your location and turning coordinates into an address are handled by Google Play services on your phone, under Google's own privacy policy.</p>
+        <h3>Google ML Kit — barcode scanning</h3>
+        <p>Barcodes and QR codes are read on the phone with ML Kit. Camera images are never sent anywhere.</p>
+        <h3>What is not included</h3>
+        <p>The app contains no ad network, analytics, crash reporting, social login or cloud storage service.</p>
+      </section>
+
+      <section id="en-ads"><h2><span class="no">06</span>Advertising and purchases</h2>
+        <p>The app shows no ads and does not use the advertising ID. There are no in-app purchases. If a paid version or feature is added in the future, this page will be updated and the change announced in the app.</p>
+      </section>
+
+      <section id="en-sharing"><h2><span class="no">07</span>Sharing</h2>
+        <p>Reports, photos, locations, shot lists and backups are sent only when you tap <b>Share</b>, to the app you choose in Android's share sheet (email, messaging, Drive, etc.). Shared content includes folder/site names, locations, stamp details and your answers. Once a file reaches another app, that app's privacy terms apply.</p>
+        <p>A shot list file contains only the list structure (items, questions, settings); it contains no photos or job records.</p>
+      </section>
+
+      <section id="en-retention"><h2><span class="no">08</span>Retention and deletion</h2>
+        <ul>
+          <li>The developer holds no data, so there is nothing to delete on the developer's side.</li>
+          <li>Your photos, videos and job records stay in your save folder until you delete them. Deleting folders or files inside the app always asks for confirmation.</li>
+          <li>Uninstalling the app removes the settings and indexes in its private storage; files in your save folder are your own and stay where they are.</li>
+          <li>Intermediate files created while preparing reports are deleted; share files stay in the cache until Android clears it or the app is uninstalled.</li>
+        </ul>
+      </section>
+
+      <section id="en-security"><h2><span class="no">09</span>Security</h2>
+        <p>Your data is protected by your phone and Android; since the app does not move data over the network, there is no transfer risk. We recommend protecting your phone with a screen lock and checking who you share files with.</p>
+      </section>
+
+      <section id="en-children"><h2><span class="no">10</span>Children</h2>
+        <p>SAM Camera GPS is designed for professional field use and is not directed at children. The app does not knowingly collect personal data from anyone.</p>
+      </section>
+
+      <section id="en-rights"><h2><span class="no">11</span>Your rights</h2>
+        <p>Because the developer has no servers and no records about you, access, correction, erasure or portability requests (GDPR, KVKK) have no subject on the developer's side; all of your data is already in your hands. For this reason, requests for access, correction, erasure and portability cannot be directed to us. You can revoke permissions at any time under <b>Settings → Apps → SAM Camera GPS → Permissions</b>.</p>
+      </section>
+
+      <section id="en-disclaimer"><h2><span class="no">12</span>Disclaimer and acceptance</h2>
+        <div class="not uyari"><b>Important:</b> If you do not accept these terms, do not use the app and uninstall it from your phone. Installing or using the app means you accept all of the terms on this page.</div>
+        <ul>
+          <li>SAM Camera GPS is provided <b>“as is”</b> and <b>“as available”</b>, without any warranty, express or implied, that it will be error-free, uninterrupted or fit for a particular purpose.</li>
+          <li>Location, address, time, altitude and heading on the stamp come from the phone's GPS, clock and address service and may be wrong or incomplete. Checking the accuracy of photos, reports, measurements, findings and site scores, and any decisions made on them and their consequences, are <b>entirely the user's responsibility</b>.</li>
+          <li>Backing up data (photos, videos, job records, reports) is the user's responsibility. The developer is not responsible for data loss caused by a lost or broken phone, uninstalling the app, deleted files or any other reason.</li>
+          <li>Who you share files with, the personal or business information they contain, and obtaining any permissions required where photos are taken are the user's responsibility.</li>
+          <li>To the fullest extent permitted by applicable law, the developer shall not be liable for any direct or indirect damage, loss, lost profit, lost business, penalty or claim arising from the use of or inability to use the app, and no claim may be brought against the developer on these grounds.</li>
+          <li>The app does not replace an occupational safety, engineering or inspection tool; technical decisions on site must be made by authorised persons.</li>
+        </ul>
+      </section>
+
+      <section id="en-changes"><h2><span class="no">13</span>Changes</h2>
+        <p>This policy may be updated as features are added. For significant changes the effective date is renewed and the change is announced in the app. Current effective date: <b>24 November 2026</b>.</p>
+      </section>
+
+      <section id="en-contact"><h2><span class="no">14</span>Contact</h2>
+        <p>App: <b>SAM Camera GPS</b><br>Email: <a href="mailto:rkckglu@gmail.com">rkckglu@gmail.com</a></p>
+      </section>
+    </article>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="kap">
+    <span>SAM Camera GPS · <span lang="tr">Gizlilik Politikası</span><span lang="en">Privacy Policy</span></span>
+    <span><span lang="tr">Son güncelleme: 24 Kasım 2026</span><span lang="en">Last updated: 24 November 2026</span></span>
+    <a href="index.html"><span lang="tr">Tanıtım sayfası</span><span lang="en">Product page</span></a>
+    <span class="rk">R.K.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const kok = document.documentElement;
+  const sakla = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* depolama yoksa yalniz bu ziyaret */ } };
+  const oku = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  function dilSec(d) {
+    if (d !== "tr" && d !== "en") d = "tr";
+    kok.dataset.dil = d; kok.lang = d;
+    document.title = d === "en" ? "SAM Camera GPS — Privacy Policy" : "SAM Camera GPS — Gizlilik Politikası";
+    document.querySelectorAll("[data-dil]").forEach((b) => b.tagName === "BUTTON" && b.setAttribute("aria-pressed", String(b.dataset.dil === d)));
+    sakla("samgps-dil", d);
+  }
+  function temaSec(t) {
+    if (t !== "koyu" && t !== "acik") t = "koyu";
+    kok.dataset.tema = t;
+    document.querySelectorAll("button[data-tema]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tema === t)));
+    sakla("samgps-tema", t);
+  }
+  // Varsayilan: Turkce, koyu. ?lang=en adresi ya da daha once secilen.
+  dilSec(new URLSearchParams(location.search).get("lang") || oku("samgps-dil") || "tr");
+  temaSec(oku("samgps-tema") || "koyu");
+  document.querySelectorAll("button[data-dil]").forEach((b) => b.addEventListener("click", () => dilSec(b.dataset.dil)));
+  document.querySelectorAll("button[data-tema]").forEach((b) => b.addEventListener("click", () => temaSec(b.dataset.tema)));
+})();
+</script>
+</body>
+</html>
