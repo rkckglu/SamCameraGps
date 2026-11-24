@@ -10,11 +10,7 @@
 <meta property="og:title" content="SAM Camera GPS">
 <meta property="og:description" content="Konumlu fotoğraf, çekim listesi ve tek dokunuşla saha raporu. / GPS-stamped photos, shot lists and one-tap site reports.">
 <meta property="og:image" content="icon.png">
-<!--
-  Play Store tanitim + gizlilik sayfasi. Varsayilan dil Turkce; ?lang=en ya da ustteki dugme ile Ingilizce.
-  Gizlilik politikasi bu sayfada: ...index.html#gizlilik (Play Console'a bu adres yazilir).
-  DOLDURULACAK: asagidaki ILETISIM ve PLAY_LINK.
--->
+
 <style>
 :root{
   --lacivert:#0C1F42; --lacivert2:#13305F; --sari:#F5C518; --sari2:#FFD84D;
@@ -26,7 +22,7 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--zemin);color:var(--metin);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--sari)}
-/* dil: yalniz secili dildeki ogeler gorunur */
+
 html[data-dil="tr"] [lang="en"]:not(html), html[data-dil="en"] [lang="tr"]:not(html){display:none!important}
 
 .kap{max-width:1120px;margin:0 auto;padding:0 22px}
@@ -377,10 +373,10 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin);letter-spacing:.5
 </footer>
 
 <script>
-// ===== DOLDURULACAK =====
+
 const ILETISIM = "rkckglu@gmail.com";
-const PLAY_LINK = "";  // ornek: "https://play.google.com/store/apps/details?id=com.samcameragps.app"
-// ========================
+const PLAY_LINK = "";  
+
 
 (function () {
   const kok = document.documentElement;
@@ -392,9 +388,9 @@ const PLAY_LINK = "";  // ornek: "https://play.google.com/store/apps/details?id=
       ? "SAM Camera GPS — GPS-stamped photos, shot lists and site reports"
       : "SAM Camera GPS — Konumlu fotoğraf, çekim listesi ve saha raporu";
     document.querySelectorAll(".dil button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dil === d)));
-    try { localStorage.setItem("samgps-dil", d); } catch (e) { /* depolama yoksa yalniz bu ziyaret */ }
+    try { localStorage.setItem("samgps-dil", d); } catch (e) { }
   }
-  // Varsayilan Turkce; ?lang=en adresiyle ya da daha once secilen dil.
+  
   let d = new URLSearchParams(location.search).get("lang");
   if (!d) { try { d = localStorage.getItem("samgps-dil"); } catch (e) { d = null; } }
   dilSec(d || "tr");
