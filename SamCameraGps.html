@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="tr" data-dil="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAM Camera GPS — Konumlu fotoğraf, çekim listesi ve saha raporu</title>
+<meta name="description" content="SAM Camera GPS: bakım, arıza ve montaj işlerinde konum ve zaman damgalı fotoğraf, çekim listesi ve tek dokunuşla PDF/HTML rapor. İnternetsiz çalışır, hesap ve bulut yok.">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="theme-color" content="#0C1F42">
+<meta property="og:title" content="SAM Camera GPS">
+<meta property="og:description" content="Konumlu fotoğraf, çekim listesi ve tek dokunuşla saha raporu. / GPS-stamped photos, shot lists and one-tap site reports.">
+<meta property="og:image" content="icon.png">
+<!--
+  Play Store tanitim + gizlilik sayfasi. Varsayilan dil Turkce; ?lang=en ya da ustteki dugme ile Ingilizce.
+  Gizlilik politikasi bu sayfada: ...index.html#gizlilik (Play Console'a bu adres yazilir).
+  DOLDURULACAK: asagidaki ILETISIM ve PLAY_LINK.
+-->
+<style>
+:root{
+  --lacivert:#0C1F42; --lacivert2:#13305F; --sari:#F5C518; --sari2:#FFD84D;
+  --zemin:#0B0F12; --yuzey:#151A1F; --yuzey2:#1D242B; --cizgi:#2A333B;
+  --metin:#ECEFF2; --solgun:#94A3AF; --yesil:#34D399; --kirmizi:#F87171;
+  --r:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--zemin);color:var(--metin);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--sari)}
+/* dil: yalniz secili dildeki ogeler gorunur */
+html[data-dil="tr"] [lang="en"]:not(html), html[data-dil="en"] [lang="tr"]:not(html){display:none!important}
+
+.kap{max-width:1120px;margin:0 auto;padding:0 22px}
+header.ust{position:sticky;top:0;z-index:10;background:rgba(11,15,18,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--cizgi)}
+header.ust .kap{display:flex;align-items:center;gap:14px;height:62px}
+.marka{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px;color:var(--metin);text-decoration:none}
+.marka img{width:34px;height:34px;border-radius:9px}
+nav.menu{margin-left:auto;display:flex;gap:18px;align-items:center}
+nav.menu a{color:var(--solgun);text-decoration:none;font-size:14.5px;font-weight:600}
+nav.menu a:hover{color:var(--metin)}
+.dil{display:flex;border:1px solid var(--cizgi);border-radius:999px;overflow:hidden}
+.dil button{background:none;border:0;color:var(--solgun);font:700 13px system-ui,sans-serif;padding:7px 12px;cursor:pointer}
+.dil button[aria-pressed="true"]{background:var(--sari);color:#111}
+@media (max-width:760px){nav.menu a{display:none}}
+
+/* hero */
+.hero{background:radial-gradient(1200px 500px at 80% -10%,#1C3F7A 0%,transparent 60%),linear-gradient(180deg,var(--lacivert),#0A1630 70%,var(--zemin));padding:70px 0 80px;overflow:hidden}
+.hero .kap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+@media (max-width:900px){.hero .kap{grid-template-columns:1fr}.telefon{margin:0 auto}}
+.etiket{display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:700;color:var(--sari);letter-spacing:1.2px;text-transform:uppercase}
+.etiket::before{content:"";width:22px;height:2px;background:var(--sari)}
+h1{font-size:clamp(34px,5.2vw,56px);line-height:1.08;margin:16px 0 18px;letter-spacing:-.5px}
+h1 em{font-style:normal;color:var(--sari)}
+.giris{font-size:18.5px;color:#C9D3DC;max-width:560px;margin:0 0 26px}
+.rozetler{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px;padding:0;list-style:none}
+.rozetler li{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);border-radius:999px;padding:6px 13px;font-size:13.5px;font-weight:600}
+.dugmeler{display:flex;flex-wrap:wrap;gap:12px}
+.dg{display:inline-flex;align-items:center;gap:10px;border-radius:14px;padding:13px 20px;font-weight:800;text-decoration:none;font-size:15.5px}
+.dg.ana{background:var(--sari);color:#111}
+.dg.ana:hover{background:var(--sari2)}
+.dg.ikinci{border:1px solid rgba(255,255,255,.25);color:var(--metin)}
+.dg.pasif{opacity:.85;cursor:default}
+
+/* telefon cizimi */
+.telefon{width:290px;aspect-ratio:9/19.5;border-radius:42px;background:#05070A;border:2px solid #2B3440;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 8px #0E141A;position:relative;overflow:hidden}
+.ekran{position:absolute;inset:10px;border-radius:33px;overflow:hidden;background:linear-gradient(160deg,#3E5468 0%,#22303D 35%,#1A2128 60%,#2E3A2A 100%)}
+.ekran::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(90deg,transparent 0 30%,rgba(255,255,255,.06) 30% 31%,transparent 31% 62%,rgba(255,255,255,.06) 62% 63%,transparent 63%),
+  repeating-linear-gradient(180deg,transparent 0 46px,rgba(255,255,255,.035) 46px 47px)}
+.serit{position:absolute;left:10px;right:10px;top:34px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.22);border-radius:14px;padding:8px 10px;font-size:11.5px;font-weight:700;display:flex;gap:7px;align-items:center}
+.serit b{color:var(--sari)}
+.cevap{position:absolute;left:10px;bottom:118px;background:rgba(0,0,0,.45);border:1px solid #F87171;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;color:#FCA5A5}
+.mod{position:absolute;left:0;right:12px;bottom:118px;display:flex;justify-content:flex-end;gap:4px}
+.mod span{font-size:10px;font-weight:800;letter-spacing:.6px;padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.25)}
+.mod span.s{background:var(--sari);color:#111;border-color:var(--sari)}
+.damga{position:absolute;left:10px;right:10px;bottom:150px;background:rgba(0,0,0,.5);border-radius:10px;padding:8px 10px;font-size:10.5px;line-height:1.45}
+.damga .s{font-size:15px;font-weight:800}
+.damga .k{color:var(--sari);font-weight:700}
+.deklansor{position:absolute;left:50%;bottom:30px;width:66px;height:66px;margin-left:-33px;border-radius:50%;border:4px solid #fff;background:rgba(255,255,255,.12)}
+.deklansor::after{content:"";position:absolute;inset:6px;border-radius:50%;background:#fff}
+
+section{padding:84px 0}
+section.alt{background:var(--yuzey)}
+h2{font-size:clamp(26px,3.6vw,38px);line-height:1.15;margin:10px 0 14px;letter-spacing:-.3px}
+.alt-baslik{color:var(--solgun);font-size:17.5px;max-width:680px;margin:0 0 40px}
+
+/* ozellikler */
+.izgara{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:900px){.izgara{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.izgara{grid-template-columns:1fr}}
+.kart{background:var(--yuzey);border:1px solid var(--cizgi);border-radius:var(--r);padding:22px}
+section.alt .kart{background:var(--yuzey2)}
+.kart .ik{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(245,197,24,.12);color:var(--sari);font-size:22px;margin-bottom:14px}
+.kart h3{margin:0 0 6px;font-size:17.5px}
+.kart p{margin:0;color:var(--solgun);font-size:15px}
+
+/* adimlar */
+.adimlar{counter-reset:a;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;list-style:none;padding:0;margin:0}
+.adimlar li{counter-increment:a;display:flex;gap:14px;background:var(--yuzey2);border:1px solid var(--cizgi);border-radius:var(--r);padding:18px}
+.adimlar li::before{content:counter(a);flex:0 0 34px;height:34px;border-radius:50%;background:var(--sari);color:#111;font-weight:900;display:grid;place-items:center}
+.adimlar b{display:block;margin-bottom:2px}
+.adimlar span{color:var(--solgun);font-size:15px}
+
+/* rapor ornegi */
+.iki{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+@media (max-width:900px){.iki{grid-template-columns:1fr}}
+.liste{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.liste li{display:flex;gap:12px;align-items:flex-start}
+.liste li::before{content:"✓";color:var(--yesil);font-weight:900;margin-top:1px}
+.rapor{background:#fff;color:#111827;border-radius:14px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.45);font-size:13px}
+.rapor .u{font-size:10px;font-weight:800;letter-spacing:1.2px;color:#6B7280;text-transform:uppercase}
+.rapor .b{font-size:22px;font-weight:900;margin:2px 0 10px}
+.rapor .c{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.rapor .c span{border:1px solid #E5E7EB;border-radius:999px;padding:3px 9px;font-size:11px}
+.rapor .c span.p{border-color:#DC2626;color:#DC2626;font-weight:800}
+.rapor table{width:100%;border-collapse:collapse}
+.rapor td{border-top:1px solid #E5E7EB;padding:7px 4px;vertical-align:top}
+.rapor .k{color:#DC2626;font-weight:800}
+.rapor .y{color:#059669;font-weight:800}
+
+/* gizlilik */
+.gizlilik{max-width:820px}
+.gizlilik h3{font-size:19px;margin:30px 0 8px}
+.gizlilik p,.gizlilik li{color:#C9D3DC;font-size:15.5px}
+.gizlilik ul{padding-left:20px}
+.gizlilik .tarih{color:var(--solgun);font-size:14px}
+.ozet{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0 8px}
+@media (max-width:560px){.ozet{grid-template-columns:1fr}}
+.ozet div{background:var(--yuzey2);border:1px solid var(--cizgi);border-radius:14px;padding:14px 16px;font-weight:700}
+.ozet div small{display:block;color:var(--solgun);font-weight:500;font-size:13.5px;margin-top:2px}
+
+footer{border-top:1px solid var(--cizgi);padding:30px 0 40px;color:var(--solgun);font-size:14px}
+footer .kap{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+footer .rk{margin-left:auto;font-weight:800;color:var(--metin);letter-spacing:.5px}
+</style>
+</head>
+<body>
+
+<header class="ust">
+  <div class="kap">
+    <a class="marka" href="#"><img src="icon.png" alt="" width="34" height="34">SAM Camera GPS</a>
+    <nav class="menu" aria-label="Menü">
+      <a href="#ozellikler"><span lang="tr">Özellikler</span><span lang="en">Features</span></a>
+      <a href="#nasil"><span lang="tr">Nasıl çalışır</span><span lang="en">How it works</span></a>
+      <a href="#gizlilik"><span lang="tr">Gizlilik</span><span lang="en">Privacy</span></a>
+      <div class="dil" role="group" aria-label="Dil / Language">
+        <button type="button" data-dil="tr" aria-pressed="true">TR</button>
+        <button type="button" data-dil="en" aria-pressed="false">EN</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="hero">
+  <div class="kap">
+    <div>
+      <span class="etiket"><span lang="tr">Saha fotoğrafı ve rapor</span><span lang="en">Field photos &amp; reports</span></span>
+      <h1 lang="tr">Her fotoğraf <em>yeri ve saatiyle</em> belge olur.</h1>
+      <h1 lang="en">Every photo becomes proof, <em>with place and time.</em></h1>
+      <p class="giris" lang="tr">SAM Camera GPS; bakım, arıza ve montaj işlerinde sahayı adım adım fotoğraflatır, her kareye konum ve zaman damgası basar, iş bitince PDF ve rapor sayfasını tek dokunuşla hazırlar.</p>
+      <p class="giris" lang="en">SAM Camera GPS guides you through a site step by step for maintenance, fault and installation jobs, stamps every photo with location and time, and builds a PDF and web report with one tap when the job is done.</p>
+      <ul class="rozetler">
+        <li><span lang="tr">İnternetsiz çalışır</span><span lang="en">Works offline</span></li>
+        <li><span lang="tr">Hesap ve bulut yok</span><span lang="en">No account, no cloud</span></li>
+        <li><span lang="tr">Reklam yok</span><span lang="en">No ads</span></li>
+        <li><span lang="tr">8 dil</span><span lang="en">8 languages</span></li>
+        <li>Android</li>
+      </ul>
+      <div class="dugmeler">
+        <a class="dg ana" id="playDugme" href="#">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3.6 2.3c-.3.3-.4.7-.4 1.2v17c0 .5.1.9.4 1.2l9.5-9.7zM14.2 12.9l2.8 2.8-11.6 6.6zM17 8.3l-2.8 2.8L5.4 1.7zM18.4 9.1l3 1.7c.9.5.9 1.8 0 2.3l-3 1.7-3.1-2.9z"/></svg>
+          <span id="playMetin"><span lang="tr">Google Play'de</span><span lang="en">Get it on Google Play</span></span>
+        </a>
+        <a class="dg ikinci" href="#ozellikler"><span lang="tr">Özellikleri gör</span><span lang="en">See features</span></a>
+      </div>
+    </div>
+    <div class="telefon" aria-hidden="true">
+      <div class="ekran">
+        <div class="serit">▤ <b>4/24</b> <span lang="tr">Pano genel görünüm</span><span lang="en">Panel overview</span></div>
+        <!-- Damga ornegi: demo; her acilista rastgele uretilir (gercek bir konum degil) -->
+        <div class="damga">
+          <div class="s" id="demoSaat">10:30 · 01.01.2026</div>
+          <div id="demoYer">Demo</div>
+          <div class="k" id="demoKoord">00.00000° N · 00.00000° E · ±5 m</div>
+          <div>4 · <span lang="tr">Pano genel görünüm</span><span lang="en">Panel overview</span></div>
+        </div>
+        <div class="cevap">3. <span lang="tr">Hayır</span><span lang="en">No</span> ✎</div>
+        <div class="mod"><span class="s"><span lang="tr">FOTO</span><span lang="en">PHOTO</span></span><span>VIDEO</span></div>
+        <div class="deklansor"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="ozellikler">
+  <div class="kap">
+    <span class="etiket"><span lang="tr">Özellikler</span><span lang="en">Features</span></span>
+    <h2 lang="tr">Sahada hızlı, rapor hazır</h2>
+    <h2 lang="en">Fast in the field, report ready</h2>
+    <p class="alt-baslik" lang="tr">Eldiven varken bile kullanılacak kadar sade; işi unutmadan, karıştırmadan bitirmek için gereken her şey.</p>
+    <p class="alt-baslik" lang="en">Simple enough to use with gloves on, with everything you need to finish a job without forgetting or mixing anything up.</p>
+    <div class="izgara">
+      <div class="kart"><div class="ik">⌖</div>
+        <h3 lang="tr">Konumlu damga</h3><h3 lang="en">Location stamp</h3>
+        <p lang="tr">Saat, tarih, adres, koordinat ve hassasiyet, rakım, yön; logo, not ve QR kod. Hazır şablonlardan seç, istemediğin alanı kapat.</p>
+        <p lang="en">Time, date, address, coordinates and accuracy, altitude, heading; logo, note and QR code. Pick a template, switch off what you don't need.</p></div>
+      <div class="kart"><div class="ik">☑</div>
+        <h3 lang="tr">Çekim listesi</h3><h3 lang="en">Shot lists</h3>
+        <p lang="tr">Her saha tipinin madde listesi; kamera sıradaki maddeyi gösterir, fotoğrafı ona bağlar. Evet/Hayır, ölçüm ve not soruları, koşullu atlama, “Daha sonra”.</p>
+        <p lang="en">A checklist per site type; the camera shows the next item and links the photo to it. Yes/No, measurement and note questions, conditional skips, “Later”.</p></div>
+      <div class="kart"><div class="ik">⚒</div>
+        <h3 lang="tr">İş türleri</h3><h3 lang="en">Job types</h3>
+        <p lang="tr">Bakım, Arıza, Montaj hazır gelir; istediğin kadar tür eklersin. Aynı sahaya ikinci iş ayrı klasöre gider, eski fotoğraflarla karışmaz.</p>
+        <p lang="en">Maintenance, Fault and Installation are built in; add as many as you like. A second job at the same site goes into its own folder.</p></div>
+      <div class="kart"><div class="ik">▤</div>
+        <h3 lang="tr">Tek dokunuşla rapor</h3><h3 lang="en">One-tap report</h3>
+        <p lang="tr">PDF ve internetsiz açılan rapor sayfası (HTML) fotoğraflarla birlikte tek ZIP. Saha bilgileri, bulgular özeti ve saha puanı en başta.</p>
+        <p lang="en">A PDF and an offline web report (HTML) with the photos in a single ZIP. Site details, findings summary and site score up front.</p></div>
+      <div class="kart"><div class="ik">⚠</div>
+        <h3 lang="tr">Bulgular ve düzeltme</h3><h3 lang="en">Findings &amp; fixes</h3>
+        <p lang="tr">Sorunlu cevaplar bulgu olur. Düzeltince “sonra” fotoğrafı çek; raporda önce/sonra yan yana. Ertesi gün klasörden bulgulara geri dön.</p>
+        <p lang="en">Problem answers become findings. Take an “after” photo once fixed; the report shows before/after side by side. Come back to open findings later.</p></div>
+      <div class="kart"><div class="ik">⌕</div>
+        <h3 lang="tr">İş geçmişi ve yakınımdakiler</h3><h3 lang="en">Job history &amp; nearby</h3>
+        <p lang="tr">Yapılan bütün işler yıllara göre; 10 km içindeki sahalar uzaklığıyla. Kayıtlı sahaya varınca “Sahada mısın?” diye sorar.</p>
+        <p lang="en">Every job by year; sites within 10 km with their distance. Arrive at a saved site and the app asks whether you are there.</p></div>
+      <div class="kart"><div class="ik">◐</div>
+        <h3 lang="tr">Öncesi / Sonrası</h3><h3 lang="en">Before / After</h3>
+        <p lang="tr">Aynı klasörde ayrı alt klasörler; önceki fotoğraf hayalet olarak ekranda, aynı açıdan çek.</p>
+        <p lang="en">Separate sub-folders in the same folder; the earlier photo is shown as a ghost so you can match the angle.</p></div>
+      <div class="kart"><div class="ik">⌗</div>
+        <h3 lang="tr">Barkod / QR</h3><h3 lang="en">Barcode / QR</h3>
+        <p lang="tr">Seri numarasını okut, tek dokunuşla nota ekle. Okuma telefonun içinde yapılır.</p>
+        <p lang="en">Scan a serial number and add it to a note with one tap. Scanning happens on the phone.</p></div>
+      <div class="kart"><div class="ik">⇄</div>
+        <h3 lang="tr">Paylaşım ve yedek</h3><h3 lang="en">Sharing &amp; backup</h3>
+        <p lang="tr">Çekim listeleri bir dosyayla ekibe gider; ayarlar ve listeler yedeklenip geri yüklenir. Hepsi senin seçtiğin klasörde.</p>
+        <p lang="en">Shot lists travel to your team as a file; settings and lists can be backed up and restored. All in a folder you choose.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="nasil" class="alt">
+  <div class="kap">
+    <span class="etiket"><span lang="tr">Nasıl çalışır</span><span lang="en">How it works</span></span>
+    <h2 lang="tr">Sahaya varıştan rapora</h2>
+    <h2 lang="en">From arrival to report</h2>
+    <p class="alt-baslik" lang="tr">Altı adımda iş biter; rapor iş biterken hazırdır.</p>
+    <p class="alt-baslik" lang="en">Six steps and the job is done; the report is ready when you are.</p>
+    <ol class="adimlar">
+      <li><div><b lang="tr">İşi başlat</b><b lang="en">Start the job</b><span lang="tr">İş türünü ve saha tipini seç; klasör kendiliğinden açılır.</span><span lang="en">Choose the job type and site type; the folder is created for you.</span></div></li>
+      <li><div><b lang="tr">Saha bilgileri</b><b lang="en">Site details</b><span lang="tr">Saha soruları tek tek sorulur, boş geçilmez.</span><span lang="en">Site questions are asked one by one and cannot be skipped.</span></div></li>
+      <li><div><b lang="tr">Maddeleri çek</b><b lang="en">Shoot the items</b><span lang="tr">Kamera sıradaki maddeyi gösterir; soruyu cevapla, fotoğrafı çek.</span><span lang="en">The camera shows the next item; answer the question, take the photo.</span></div></li>
+      <li><div><b lang="tr">Gerekirse sonraya bırak</b><b lang="en">Leave some for later</b><span lang="tr">Ulaşamadığın maddeyi “Daha sonra” de; bitişte hatırlatılır.</span><span lang="en">Tap “Later” for an item you can't reach yet; you'll be reminded at the end.</span></div></li>
+      <li><div><b lang="tr">Bulguları düzelt</b><b lang="en">Fix findings</b><span lang="tr">Sorunu giderince “sonra” fotoğrafı ya da açıklama ekle.</span><span lang="en">Once fixed, add an “after” photo or a note.</span></div></li>
+      <li><div><b lang="tr">Gönder</b><b lang="en">Send</b><span lang="tr">PDF, rapor sayfası ve fotoğraflar tek ZIP olarak paylaşılır.</span><span lang="en">PDF, web report and photos are shared as a single ZIP.</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="kap iki">
+    <div>
+      <span class="etiket"><span lang="tr">Rapor</span><span lang="en">Report</span></span>
+      <h2 lang="tr">İş bitti, rapor hazır</h2>
+      <h2 lang="en">Job done, report ready</h2>
+      <ul class="liste">
+        <li><span lang="tr">Sorunlu cevaplar, sınır dışı ölçümler ve notlar en başta “Bulgular” özetinde</span><span lang="en">Problem answers, out-of-range measurements and notes in a “Findings” summary up front</span></li>
+        <li><span lang="tr">Düzeltilmeyen bulguların puanlarından saha puanı</span><span lang="en">A site score from the points of unfixed findings</span></li>
+        <li><span lang="tr">Rapor sayfası internetsiz açılır; telefonda, tablette, bilgisayarda</span><span lang="en">The web report opens offline on phone, tablet and computer</span></li>
+        <li><span lang="tr">Ayrıca yalnız bulguları içeren kısa PDF</span><span lang="en">Plus a short findings-only PDF</span></li>
+      </ul>
+    </div>
+    <div class="rapor" aria-hidden="true">
+      <div class="u"><span lang="tr">Bakım Raporu</span><span lang="en">Maintenance Report</span></div>
+      <div class="b">ASAHA</div>
+      <div class="c"><span>24.11.2026</span><span lang="tr">24/24 madde</span><span lang="en">24/24 items</span><span class="p"><span lang="tr">Saha puanı 4</span><span lang="en">Site score 4</span></span></div>
+      <table>
+        <tr><td>3. <span lang="tr">Panoda pas</span><span lang="en">Rust on panel</span></td><td class="k"><span lang="tr">İşlem yapılmadı · Puan 4</span><span lang="en">Not fixed · Score 4</span></td></tr>
+        <tr><td>7. <span lang="tr">Kablo kanalı kapağı</span><span lang="en">Cable duct cover</span></td><td class="y">✓ <span lang="tr">Düzeltildi</span><span lang="en">Fixed</span></td></tr>
+        <tr><td>12. <span lang="tr">Topraklama direnci</span><span lang="en">Earthing resistance</span></td><td>8,4 Ω (≤ 10)</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="gizlilik" class="alt">
+  <div class="kap gizlilik">
+    <span class="etiket"><span lang="tr">Gizlilik politikası</span><span lang="en">Privacy policy</span></span>
+
+    <!-- ===== TURKCE ===== -->
+    <div lang="tr">
+      <h2>Verileriniz telefonunuzda kalır</h2>
+      <p class="tarih">Son güncelleme: 24 Kasım 2026 · Uygulama: SAM Camera GPS (com.samcameragps.app)</p>
+      <div class="ozet">
+        <div>Hesap yok<small>Kayıt, giriş, kullanıcı profili yok.</small></div>
+        <div>Sunucu yok<small>Fotoğraf, konum ve rapor bize gönderilmez.</small></div>
+        <div>Reklam ve takip yok<small>Analitik, reklam ya da izleme aracı yok.</small></div>
+        <div>Paylaşım sizde<small>Yalnız siz “Paylaş” derseniz, seçtiğiniz uygulamaya gider.</small></div>
+      </div>
+
+      <h3>Toplanan veriler</h3>
+      <p>SAM Camera GPS kişisel veri toplamaz ve geliştiriciye hiçbir veri göndermez. Uygulamada oluşturduğunuz fotoğraflar, videolar, klasörler, çekim listeleri, cevaplar, raporlar ve ayarlar yalnızca telefonunuzda saklanır: fotoğraf ve raporlar sizin seçtiğiniz kayıt klasöründe, ayarlar uygulamanın kendi alanında.</p>
+
+      <h3>İzinler ve kullanım amaçları</h3>
+      <ul>
+        <li><b>Kamera:</b> fotoğraf ve video çekmek, barkod/QR okumak için.</li>
+        <li><b>Mikrofon:</b> yalnızca video kaydında ses almak için.</li>
+        <li><b>Konum:</b> fotoğrafa konum damgası basmak, klasöre saha konumunu kaydetmek ve yakındaki sahaları göstermek için. Konum yalnızca uygulama açıkken kullanılır; arka planda konum alınmaz.</li>
+        <li><b>Dosya erişimi:</b> yalnızca sizin seçtiğiniz kayıt klasörüne yazmak ve sizin galeriden seçtiğiniz fotoğrafları eklemek için.</li>
+      </ul>
+
+      <h3>Telefonun kendi servisleri</h3>
+      <p>Damgadaki adres yazısı için koordinatlar, telefonunuzun adres çözümleme servisine (Android Geocoder; çoğu cihazda Google tarafından sağlanır) gönderilir. Bu istekte klasör adı, fotoğraf ya da başka bir bilgi yer almaz. Barkod okuma telefonun içinde (Google ML Kit) yapılır; görüntü gönderilmez. “Konuma git” dediğinizde harita uygulamasına yalnızca koordinat gönderilir. Bu servislerin kendi gizlilik koşulları geçerlidir.</p>
+
+      <h3>Paylaşım</h3>
+      <p>Raporlar, fotoğraflar, konum ve çekim listeleri yalnızca siz “Paylaş” dediğinizde, Android paylaşım ekranından seçtiğiniz uygulamaya (e-posta, mesajlaşma vb.) gönderilir. Paylaştığınız içeriğin içinde klasör/saha adı, konum ve damga bilgileri bulunur.</p>
+
+      <h3>Saklama ve silme</h3>
+      <p>Uygulama içi verileri (ayarlar, listeler, iş kayıtları) uygulamayı kaldırarak silebilirsiniz. Kayıt klasörünüzdeki fotoğraf ve raporlar sizin dosyalarınızdır; uygulama kaldırılsa da yerinde kalır, dilediğiniz zaman silebilirsiniz.</p>
+
+      <h3>Çocuklar</h3>
+      <p>Uygulama iş ve saha kullanımı için tasarlanmıştır, 13 yaş altı çocuklara yönelik değildir ve kimseden kişisel veri toplamaz.</p>
+
+      <h3>Değişiklikler ve iletişim</h3>
+      <p>Bu politika değişirse bu sayfa güncellenir ve tarih yenilenir. Sorularınız için: <a class="iletisim" href="mailto:">e-posta</a>.</p>
+    </div>
+
+    <!-- ===== ENGLISH ===== -->
+    <div lang="en">
+      <h2>Your data stays on your phone</h2>
+      <p class="tarih">Last updated: 24 November 2026 · App: SAM Camera GPS (com.samcameragps.app)</p>
+      <div class="ozet">
+        <div>No account<small>No sign-up, login or user profile.</small></div>
+        <div>No server<small>Photos, locations and reports are never sent to us.</small></div>
+        <div>No ads or tracking<small>No analytics, advertising or tracking tools.</small></div>
+        <div>You decide what to share<small>Only when you tap “Share”, to the app you choose.</small></div>
+      </div>
+
+      <h3>Data we collect</h3>
+      <p>SAM Camera GPS does not collect personal data and sends no data to the developer. The photos, videos, folders, shot lists, answers, reports and settings you create are stored only on your phone: photos and reports in the save folder you choose, settings in the app's private storage.</p>
+
+      <h3>Permissions and why we need them</h3>
+      <ul>
+        <li><b>Camera:</b> to take photos and videos and to scan barcodes/QR codes.</li>
+        <li><b>Microphone:</b> only to record sound with videos.</li>
+        <li><b>Location:</b> to stamp photos with location, save a site location for a folder and show nearby sites. Location is used only while the app is open; it is never collected in the background.</li>
+        <li><b>File access:</b> only to write to the save folder you choose and to add photos you pick from your gallery.</li>
+      </ul>
+
+      <h3>Your phone's own services</h3>
+      <p>To show an address on the stamp, coordinates are sent to your phone's address lookup service (Android Geocoder, provided by Google on most devices). No folder name, photo or other information is included. Barcode scanning runs on the phone (Google ML Kit); no image is sent. When you tap “Go to location”, only the coordinates are passed to your map app. These services are governed by their own privacy terms.</p>
+
+      <h3>Sharing</h3>
+      <p>Reports, photos, locations and shot lists are sent only when you tap “Share”, to the app you choose in Android's share sheet (email, messaging, etc.). Shared content includes folder/site names, locations and stamp details.</p>
+
+      <h3>Retention and deletion</h3>
+      <p>You can delete in-app data (settings, lists, job records) by uninstalling the app. Photos and reports in your save folder are your own files; they stay where they are after uninstalling and you can delete them at any time.</p>
+
+      <h3>Children</h3>
+      <p>The app is designed for work and field use, is not directed at children under 13, and collects no personal data from anyone.</p>
+
+      <h3>Changes and contact</h3>
+      <p>If this policy changes, this page will be updated with a new date. Questions: <a class="iletisim" href="mailto:">email</a>.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="kap">
+    <span>© 2026 SAM Camera GPS</span>
+    <a href="#gizlilik"><span lang="tr">Gizlilik politikası</span><span lang="en">Privacy policy</span></a>
+    <a class="iletisim" href="mailto:"><span lang="tr">İletişim</span><span lang="en">Contact</span></a>
+    <span class="rk">R.K.</span>
+  </div>
+</footer>
+
+<script>
+// ===== DOLDURULACAK =====
+const ILETISIM = "rkckglu@gmail.com";
+const PLAY_LINK = "";  // ornek: "https://play.google.com/store/apps/details?id=com.samcameragps.app"
+// ========================
+
+(function () {
+  const kok = document.documentElement;
+  function dilSec(d) {
+    if (d !== "tr" && d !== "en") d = "tr";
+    kok.dataset.dil = d;
+    kok.lang = d;
+    document.title = d === "en"
+      ? "SAM Camera GPS — GPS-stamped photos, shot lists and site reports"
+      : "SAM Camera GPS — Konumlu fotoğraf, çekim listesi ve saha raporu";
+    document.querySelectorAll(".dil button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dil === d)));
+    try { localStorage.setItem("samgps-dil", d); } catch (e) { /* depolama yoksa yalniz bu ziyaret */ }
+  }
+  // Varsayilan Turkce; ?lang=en adresiyle ya da daha once secilen dil.
+  let d = new URLSearchParams(location.search).get("lang");
+  if (!d) { try { d = localStorage.getItem("samgps-dil"); } catch (e) { d = null; } }
+  dilSec(d || "tr");
+  document.querySelectorAll(".dil button").forEach((b) => b.addEventListener("click", () => dilSec(b.dataset.dil)));
+
+  document.querySelectorAll("a.iletisim").forEach((a) => {
+    if (ILETISIM) { a.href = "mailto:" + ILETISIM; if (a.closest(".gizlilik")) a.textContent = ILETISIM; }
+    else a.removeAttribute("href");
+  });
+  // Telefon cizimindeki damga: rastgele demo saat, yer ve koordinat.
+  const yerler = [
+    ["Çankaya, Ankara", 39.9, 32.85], ["Kadıköy, İstanbul", 40.99, 29.03], ["Bornova, İzmir", 38.46, 27.22],
+    ["Nilüfer, Bursa", 40.21, 28.98], ["Selçuklu, Konya", 37.95, 32.49], ["Melikgazi, Kayseri", 38.73, 35.48],
+    ["Seyhan, Adana", 37.0, 35.32], ["Ortahisar, Trabzon", 41.0, 39.72],
+  ];
+  const r = (a, b) => a + Math.random() * (b - a);
+  const y = yerler[Math.floor(Math.random() * yerler.length)];
+  const en = y[1] + r(-0.04, 0.04), bo = y[2] + r(-0.04, 0.04);
+  const t = new Date(Date.now() - Math.floor(r(0, 30)) * 86400000);
+  const iki = (n) => String(n).padStart(2, "0");
+  t.setHours(Math.floor(r(8, 18)), Math.floor(r(0, 60)));
+  document.getElementById("demoSaat").textContent = `${iki(t.getHours())}:${iki(t.getMinutes())} · ${iki(t.getDate())}.${iki(t.getMonth() + 1)}.${t.getFullYear()}`;
+  document.getElementById("demoYer").textContent = `${y[0]} · Türkiye`;
+  document.getElementById("demoKoord").textContent = `${en.toFixed(5)}° N · ${bo.toFixed(5)}° E · ±${Math.floor(r(3, 9))} m`;
+
+  const play = document.getElementById("playDugme");
+  if (PLAY_LINK) { play.href = PLAY_LINK; play.target = "_blank"; play.rel = "noopener"; }
+  else {
+    play.removeAttribute("href");
+    play.classList.add("pasif");
+    document.getElementById("playMetin").innerHTML = '<span lang="tr">Yakında Google Play\'de</span><span lang="en">Coming soon to Google Play</span>';
+  }
+})();
+</script>
+</body>
+</html>
