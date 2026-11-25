@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<!-- SAM Camera GPS yonetici araci (herkese acik kopya). Hicbir veri gonderilmez; her sey bu tarayicida kalir. Kaynak: araclar/gorev-listesi.html -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Görev Hazırlayıcı</title>
+<style>
+/* SAM Camera GPS gorev hazirlayici: yonetici gorevleri yazar, .samgorev dosyasi olarak indirir,
+   WhatsApp'tan paylasir. Dosyada kisi adi yok. Cekim listesi hazirlayicisiyla ayni renkler. */
+:root {
+  --zemin: #EEF1F5; --yuzey: #FFFFFF; --yuzey2: #F6F8FB; --cizgi: #D5DCE6; --metin: #142033; --solgun: #5B6B80;
+  --lacivert: #13294B; --sari: #F2B705; --sari-metin: #1B1400; --vurgu: #1E4A8C; --iyi: #13804A; --kotu: #C2322B;
+  --font: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+:root[data-tema="koyu"] {
+  --zemin: #0C1422; --yuzey: #142033; --yuzey2: #1A2940; --cizgi: #2A3B55; --metin: #E6ECF5; --solgun: #93A3B8;
+  --lacivert: #0A1628; --vurgu: #8DB4F2; --iyi: #4CC38A; --kotu: #F0736B; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--zemin); color: var(--metin); font: 15px/1.45 var(--font); min-height: 100vh; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--sari); outline-offset: 2px; }
+header.ust { background: var(--lacivert); color: #fff; display: flex; align-items: center; gap: 14px; padding: 10px 18px; flex-wrap: wrap; position: sticky; top: 0; z-index: 5; }
+.logo { width: 34px; height: 34px; border-radius: 9px; background: #13294B; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.15); flex: none; }
+.ust h1 { font-size: 17px; margin: 0; font-weight: 700; }
+.ust .alt { font-size: 12.5px; color: #B8C6DA; }
+.bosluk { flex: 1; }
+.ub { border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.06); color: #fff; border-radius: 9px; padding: 7px 12px; font-weight: 600; font-size: 13.5px; display: inline-flex; align-items: center; gap: 7px; }
+.ub:hover { background: rgba(255,255,255,.14); }
+.ub.ana { background: var(--sari); color: var(--sari-metin); border-color: var(--sari); }
+main { max-width: 980px; margin: 0 auto; padding: 16px; display: grid; gap: 14px; }
+.panel { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 14px; padding: 14px 16px; }
+.bas { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--solgun); margin-bottom: 6px; }
+.ipucu { font-size: 12.5px; color: var(--solgun); }
+input[type=text], input[type=number], input[type=date], select, textarea { width: 100%; border: 1px solid var(--cizgi); background: var(--yuzey2); border-radius: 9px; padding: 8px 10px; }
+textarea { resize: vertical; min-height: 40px; }
+label.k { display: grid; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--solgun); }
+.izgara { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.gorev { border: 1px solid var(--cizgi); border-radius: 14px; background: var(--yuzey); padding: 14px; display: grid; gap: 10px; }
+.gorev.gizli { border-style: dashed; }
+.gbas { display: flex; gap: 10px; align-items: center; }
+.gbas .no { font: 600 13px var(--mono); color: var(--solgun); }
+.gbas input.ad { font-size: 17px; font-weight: 700; background: none; border-color: transparent; }
+.gbas input.ad:hover, .gbas input.ad:focus { border-color: var(--cizgi); background: var(--yuzey2); }
+.ib { width: 32px; height: 32px; border: 1px solid var(--cizgi); background: var(--yuzey2); border-radius: 8px; display: grid; place-items: center; flex: none; }
+.ib:hover { border-color: var(--vurgu); }
+.ib.sil:hover { border-color: var(--kotu); color: var(--kotu); }
+.ib:disabled { opacity: .3; cursor: default; }
+.ozet { background: var(--yuzey2); border-left: 3px solid var(--sari); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+.secim { display: flex; flex-wrap: wrap; gap: 6px; }
+.cip { border: 1px solid var(--cizgi); background: var(--yuzey2); border-radius: 999px; padding: 5px 11px; font-size: 13px; font-weight: 600; }
+.cip.secili { border-color: var(--vurgu); background: var(--vurgu); color: #fff; }
+:root[data-tema="koyu"] .cip.secili { color: #0C1422; }
+.simgeler { display: flex; flex-wrap: wrap; gap: 4px; }
+.simgeler button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--cizgi); background: var(--yuzey2); font-size: 17px; }
+.simgeler button.secili { border-color: var(--sari); box-shadow: 0 0 0 2px var(--sari) inset; }
+.maddeler { display: grid; gap: 6px; }
+.mrow { display: flex; gap: 8px; align-items: center; }
+.mrow .no { font: 600 12px var(--mono); color: var(--solgun); min-width: 18px; text-align: right; }
+.secliste { max-height: 50vh; overflow: auto; display: grid; gap: 4px; border: 1px solid var(--cizgi); border-radius: 9px; padding: 8px; }
+.secliste label { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; }
+.secliste .bolum { font-size: 11.5px; font-weight: 700; color: var(--solgun); text-transform: uppercase; margin-top: 6px; }
+.onay { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
+.ekle { border: 1px dashed var(--cizgi); background: none; border-radius: 14px; padding: 14px; color: var(--vurgu); font-weight: 700; }
+.ekle:hover { border-color: var(--vurgu); }
+.ornekler { display: flex; flex-wrap: wrap; gap: 6px; }
+.uyari { font-size: 12.5px; color: var(--kotu); font-weight: 600; }
+.not { font-size: 13px; color: var(--solgun); display: grid; gap: 4px; }
+.not b { color: var(--metin); }
+.perde { position: fixed; inset: 0; background: rgba(5,10,20,.55); display: none; place-items: center; z-index: 20; padding: 16px; }
+.perde.acik { display: grid; }
+.kutu { background: var(--yuzey); border-radius: 14px; padding: 18px; max-width: 520px; width: 100%; display: grid; gap: 12px; }
+.kutu .dugmeler { display: flex; justify-content: flex-end; gap: 8px; }
+.db { border: 1px solid var(--cizgi); background: var(--yuzey2); border-radius: 9px; padding: 8px 14px; font-weight: 600; }
+.db.ana { background: var(--sari); border-color: var(--sari); color: var(--sari-metin); }
+.db.tehlike { background: var(--kotu); border-color: var(--kotu); color: #fff; }
+#bildirim { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--lacivert); color: #fff; padding: 9px 16px; border-radius: 10px; opacity: 0; transition: .2s; pointer-events: none; z-index: 30; }
+#bildirim.gor { opacity: 1; transform: translateX(-50%); }
+.rk { position: fixed; right: 10px; bottom: 6px; font: 600 11px var(--mono); color: var(--solgun); opacity: .7; }
+</style>
+</head>
+<body>
+<header class="ust">
+  <div class="logo" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#F2B705" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>
+  </div>
+  <div>
+    <h1>Görev Hazırlayıcı</h1>
+    <div class="alt">SAM Camera GPS · görevler, ödüller, gizli görevler</div>
+  </div>
+  <div class="bosluk"></div>
+  <button class="ub" id="iceAc">Dosya aç</button>
+  <button class="ub" id="tema">Açık / koyu</button>
+  <button class="ub ana" id="indir">Dosyayı indir (.samgorev)</button>
+</header>
+
+<main>
+  <div class="panel">
+    <div class="bas">Dosya başlığı</div>
+    <input type="text" id="baslik" maxlength="80" placeholder="Örn. Kasım görevleri">
+    <div class="ipucu" style="margin-top:6px">Telefonda “Görev dosyası · başlık” olarak görünür. Kişi adı yazmayın.</div>
+  </div>
+
+  <div class="panel">
+    <div class="bas">Hızlı örnekler</div>
+    <div class="ornekler" id="ornekler"></div>
+  </div>
+
+  <div id="liste" style="display:grid;gap:12px"></div>
+  <button class="ekle" id="ekle">+ Görev ekle</button>
+
+  <div class="panel not">
+    <div class="bas">Nasıl sayılır?</div>
+    <div><b>İş bitir:</b> yalnız bitirilmiş işler sayılır; aynı saha aynı gün bir kez sayılır.</div>
+    <div><b>0 puanlı iş:</b> puanlı çekim listesiyle yapılan ve açık (düzeltilmemiş) puanlı bulgusu kalmayan bitmiş işler.</div>
+    <div><b>Bulgu düzelt:</b> yalnız SONRA fotoğrafı çekilen düzeltmeler sayılır (fotoğrafsız “Düzeltildi” sayılmaz).</div>
+    <div><b>Madde tamamla:</b> madde adları listedeki gibi yazılmalı (büyük-küçük harf fark etmez); “Çekim listesinden seç” ile .samliste dosyasından işaretleyebilirsin. Birden çok maddede her madde ayrı sayılır.</div>
+    <div><b>Başlangıç:</b> görev, telefona yüklendiği andan (tarih ve saat) itibaren sayılır; yüklenmeden önce bitirilen iş ya da düzeltilen bulgu sayılmaz. Süre de yükleme anından başlar (1 gün = 24 saat).</div>
+    <div>Görevlerde hız ve süre baskısı yoktur; en kısa süre 1 gündür. Güvenlik her zaman önce gelir.</div>
+    <div>İlerleme yalnız çalışanın telefonunda hesaplanır. “Yöneticiye gönder” ile gelen PDF’te kişi adı yer almaz.</div>
+  </div>
+</main>
+
+<input type="file" id="dosya" accept=".samgorev,.json,application/json,application/octet-stream" hidden>
+<div class="perde" id="onayPerde"><div class="kutu"><div id="onayMetin"></div><div class="dugmeler"><button class="db" id="onayHayir">Vazgeç</button><button class="db tehlike" id="onayEvet">Sil</button></div></div></div>
+<div class="perde" id="listePerde"><div class="kutu"><b id="listeBaslik">Çekim listesinden seç</b><select id="listeSec"></select><div class="secliste" id="listeMaddeler"></div><div class="dugmeler"><button class="db" id="listeIptal">Vazgeç</button><button class="db ana" id="listeTamam">Ekle</button></div></div></div>
+<input type="file" id="listeDosya" accept=".samliste,.json,application/json,application/octet-stream" hidden>
+<div id="bildirim"></div>
+<div class="rk">R.K.</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const TUR = "samcameragps.gorev";
+  const KAYIT = "samgps.gorevler";
+  const TIPLER = [
+    { id: "isBitir", ad: "İş bitir", hedefAd: "iş", turlu: true },
+    { id: "bulguDuzelt", ad: "Bulgu düzelt", hedefAd: "bulgu", turlu: true },
+    { id: "sifirPuan", ad: "0 puanlı iş", hedefAd: "iş", turlu: true },
+    { id: "madde", ad: "Madde tamamla", hedefAd: "her madde kaç kez", turlu: false },
+  ];
+  const SURELER = [ { g: 1, ad: "1 gün" }, { g: 3, ad: "3 gün" }, { g: 5, ad: "5 gün" }, { g: 7, ad: "Haftalık" }, { g: 30, ad: "Aylık" } ];
+  // Uygulamadaki Ionicons adlari -> onizleme
+  const SIMGELER = [["trophy","🏆"],["star","⭐"],["flash","⚡"],["ribbon","🎗️"],["medal","🏅"],["rocket","🚀"],["flame","🔥"],["diamond","💎"],["shield-checkmark","🛡️"],["construct","🔧"],["camera","📷"],["location","📍"],["checkmark-done","✅"],["gift","🎁"]];
+  const ORNEKLER = [
+    { ad: "Bugün 5 bulgu düzelt", tip: "bulguDuzelt", hedef: 5, gun: 1, simge: "construct", odul: "" },
+    { ad: "Bu hafta 3 saha bakımı", tip: "isBitir", hedef: 3, gun: 7, isTuru: "Bakım", simge: "trophy", odul: "Öğle yemeği" },
+    { ad: "Bu hafta 0 puanlı 3 iş", tip: "sifirPuan", hedef: 3, gun: 7, simge: "shield-checkmark", odul: "" },
+    { ad: "Her gün 1 iş bitir", tip: "isBitir", hedef: 1, gun: 1, tekrar: true, simge: "checkmark-done", odul: "" },
+    { ad: "ASAHA ölçümleri", tip: "madde", hedef: 1, gun: 3, liste: "ASAHA", maddeler: ["Topraklama ölçümü", "İzolasyon ölçümü"], simge: "flash", odul: "" },
+    { ad: "Sürpriz: 10 bulgu düzelt", tip: "bulguDuzelt", hedef: 10, gun: 7, simge: "star", odul: "", gizli: true },
+  ];
+
+  let D = { baslik: "", gorevler: [] };
+  try { const h = JSON.parse(localStorage.getItem(KAYIT) || "null"); if (h && Array.isArray(h.gorevler)) D = h; } catch {}
+  const kaydet = () => { try { localStorage.setItem(KAYIT, JSON.stringify(D)); } catch {} };
+  const yeniId = () => "g" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  // Eski kayit: tek madde / kaldirilan tipler
+  D.gorevler = D.gorevler.map((g) => ({ ...yeniGorev(g), id: g.id || yeniId() }));
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  let bz; const bildir = (m) => { const b = $("bildirim"); b.textContent = m; b.classList.add("gor"); clearTimeout(bz); bz = setTimeout(() => b.classList.remove("gor"), 2400); };
+  const onayla = (metin) => new Promise((coz) => {
+    $("onayMetin").textContent = metin; $("onayPerde").classList.add("acik"); $("onayHayir").focus();
+    const bit = (v) => { $("onayPerde").classList.remove("acik"); coz(v); };
+    $("onayEvet").onclick = () => bit(true); $("onayHayir").onclick = () => bit(false);
+  });
+
+  function yeniGorev(o = {}) {
+    const maddeler = Array.isArray(o.maddeler) ? o.maddeler.map(String) : o.madde ? [String(o.madde)] : [];
+    const tip = TIPLER.some((x) => x.id === o.tip) ? o.tip : "isBitir";
+    return { id: yeniId(), ad: o.ad || "", aciklama: o.aciklama || "", tip, hedef: o.hedef || 1, gun: o.gun || 1, tekrar: !!o.tekrar, gizli: !!o.gizli, baslangic: o.baslangic || "", isTuru: o.isTuru || "", liste: o.liste || "", maddeler: maddeler.length ? maddeler : [""], simge: o.simge || "trophy", odul: o.odul || "" };
+  }
+
+  const dolu = (g) => (g.maddeler || []).map((x) => x.trim()).filter(Boolean);
+  function ozet(g) {
+    const t = TIPLER.find((x) => x.id === g.tip) || TIPLER[0];
+    const sure = g.tekrar ? (g.gun === 1 ? "Her gün" : g.gun === 7 ? "Her hafta" : g.gun === 30 ? "Her ay" : `Her ${g.gun} günde`) : (g.gun === 1 ? "1 gün içinde" : `${g.gun} gün içinde`);
+    const bas = g.baslangic ? `${g.baslangic.split("-").reverse().join(".")} tarihinden itibaren (yüklenmeden önce yapılanlar sayılmaz) ` : "Telefona yüklendiği andan itibaren ";
+    const tur = t.turlu && g.isTuru ? ` (${g.isTuru})` : "";
+    let ne;
+    switch (g.tip) {
+      case "isBitir": ne = `en az ${g.hedef} iş bitir${tur}`; break;
+      case "bulguDuzelt": ne = `en az ${g.hedef} bulguyu SONRA fotoğrafıyla düzelt${tur}`; break;
+      case "sifirPuan": ne = `en az ${g.hedef} işi 0 puanla bitir (açık puanlı bulgu kalmasın)${tur}`; break;
+      case "madde": {
+        const m = dolu(g);
+        ne = `${g.liste ? `“${g.liste}” listesinde ` : ""}${m.length > 1 ? `şu ${m.length} maddenin her birini` : `“${m[0] || "…"}” maddesini`} ${g.hedef > 1 ? g.hedef + " kez " : ""}tamamla${m.length > 1 ? ": " + m.map((x) => `“${x}”`).join(", ") : ""}`;
+        break;
+      }
+    }
+    return `${g.tekrar ? sure + ": " : bas + sure + " "}${ne}.${g.odul ? ` Ödül: 🎁 ${g.odul}.` : ""}${g.gizli ? " Gizli: tamamlanınca görünür." : ""}`;
+  }
+
+  function ciz() {
+    $("baslik").value = D.baslik || "";
+    const l = $("liste"); l.innerHTML = "";
+    D.gorevler.forEach((g, i) => {
+      const t = TIPLER.find((x) => x.id === g.tip) || TIPLER[0];
+      const k = document.createElement("div"); k.className = "gorev" + (g.gizli ? " gizli" : "");
+      const ozelSure = !SURELER.some((s) => s.g === g.gun);
+      k.innerHTML = `
+        <div class="gbas"><span class="no">${i + 1}</span>
+          <input type="text" class="ad" data-a="ad" maxlength="80" placeholder="Görev adı (örn. Bugün 5 bulgu düzelt)" value="${esc(g.ad)}">
+          <button class="ib" data-i="yukari" title="Yukarı" ${i === 0 ? "disabled" : ""}>↑</button>
+          <button class="ib" data-i="asagi" title="Aşağı" ${i === D.gorevler.length - 1 ? "disabled" : ""}>↓</button>
+          <button class="ib" data-i="kopya" title="Çoğalt">⧉</button>
+          <button class="ib sil" data-i="sil" title="Sil">✕</button>
+        </div>
+        <div><div class="bas">Ne yapılacak?</div><div class="secim">${TIPLER.map((x) => `<button class="cip ${x.id === g.tip ? "secili" : ""}" data-tip="${x.id}">${x.ad}</button>`).join("")}</div></div>
+        <div class="izgara">
+          <label class="k">Hedef (${t.hedefAd})<input type="number" min="1" max="9999" data-a="hedef" value="${g.hedef}"></label>
+          ${t.turlu ? `<label class="k">İş türü (boş: hepsi)<input type="text" list="turler" data-a="isTuru" maxlength="40" placeholder="Örn. Bakım" value="${esc(g.isTuru)}"></label>` : ""}
+          ${g.tip === "madde" ? `<label class="k">Liste (saha tipi, boş: hepsi)<input type="text" data-a="liste" maxlength="80" placeholder="Örn. ASAHA" value="${esc(g.liste)}"></label>` : ""}
+        </div>
+        ${g.tip === "madde" ? `<div><div class="bas">Maddeler (listedeki adıyla)</div>
+          <div class="maddeler">${g.maddeler.map((m, mi) => `<div class="mrow"><span class="no">${mi + 1}</span><input type="text" data-m="${mi}" maxlength="200" placeholder="Örn. Topraklama ölçümü" value="${esc(m)}"><button class="ib sil" data-msil="${mi}" title="Maddeyi kaldır" ${g.maddeler.length < 2 ? "disabled" : ""}>✕</button></div>`).join("")}</div>
+          <div class="secim" style="margin-top:8px"><button class="cip" data-i="maddeEkle">+ Madde ekle</button><button class="cip" data-i="listeden">Çekim listesinden seç…</button></div>
+          ${!dolu(g).length ? `<div class="uyari" style="margin-top:6px">En az bir madde adı gerekli.</div>` : ""}</div>` : ""}
+        <div><div class="bas">Süre</div><div class="secim">${SURELER.map((s) => `<button class="cip ${s.g === g.gun ? "secili" : ""}" data-gun="${s.g}">${s.ad}</button>`).join("")}
+          <button class="cip ${ozelSure ? "secili" : ""}" data-gun="ozel">Özel</button>
+          ${ozelSure ? `<input type="number" min="1" max="90" data-a="gun" value="${g.gun}" style="width:90px"> <span class="ipucu" style="align-self:center">gün</span>` : ""}</div></div>
+        <div class="izgara">
+          <label class="k">Başlangıç (boş: telefona yüklendiği an)<input type="date" data-a="baslangic" value="${esc(g.baslangic)}"></label>
+          <label class="k">Ödül (boş: ödülsüz)<input type="text" data-a="odul" maxlength="80" placeholder="Örn. Öğle yemeği" value="${esc(g.odul)}"></label>
+        </div>
+        <div class="izgara">
+          <label class="onay"><input type="checkbox" data-a="tekrar" ${g.tekrar ? "checked" : ""}> Süre bitince yeniden başlasın</label>
+          <label class="onay"><input type="checkbox" data-a="gizli" ${g.gizli ? "checked" : ""}> Gizli görev (sürpriz)</label>
+        </div>
+        <label class="k">Açıklama (isteğe bağlı)<textarea data-a="aciklama" maxlength="200" rows="1" placeholder="Kısa not">${esc(g.aciklama)}</textarea></label>
+        <div><div class="bas">Simge</div><div class="simgeler">${SIMGELER.map(([id, e]) => `<button class="${id === g.simge ? "secili" : ""}" data-simge="${id}" title="${id}">${e}</button>`).join("")}</div></div>
+        <div class="ozet">${esc(ozet(g))}</div>`;
+      k.addEventListener("input", (e) => {
+        if (e.target.dataset.m !== undefined) { g.maddeler[+e.target.dataset.m] = e.target.value; kaydet(); k.querySelector(".ozet").textContent = ozet(g); return; }
+        const a = e.target.dataset.a; if (!a) return;
+        if (e.target.type === "checkbox") { g[a] = e.target.checked; kaydet(); ciz(); return; }
+        g[a] = a === "hedef" || a === "gun" ? Math.max(1, Math.min(a === "gun" ? 90 : 9999, parseInt(e.target.value, 10) || 1)) : e.target.value;
+        kaydet(); k.querySelector(".ozet").textContent = ozet(g);
+      });
+      k.addEventListener("change", (e) => { if (e.target.dataset.m !== undefined) ciz(); });
+      k.addEventListener("click", async (e) => {
+        const b = e.target.closest("button"); if (!b) return;
+        if (b.dataset.tip) { g.tip = b.dataset.tip; kaydet(); ciz(); return; }
+        if (b.dataset.gun) { g.gun = b.dataset.gun === "ozel" ? (SURELER.some((s) => s.g === g.gun) ? 2 : g.gun) : +b.dataset.gun; kaydet(); ciz(); return; }
+        if (b.dataset.simge) { g.simge = b.dataset.simge; kaydet(); ciz(); return; }
+        if (b.dataset.msil !== undefined) { g.maddeler.splice(+b.dataset.msil, 1); if (!g.maddeler.length) g.maddeler.push(""); kaydet(); ciz(); return; }
+        if (b.dataset.i === "maddeEkle") { g.maddeler.push(""); kaydet(); ciz(); return; }
+        if (b.dataset.i === "listeden") { listedenSec(g); return; }
+        const i2 = D.gorevler.indexOf(g);
+        if (b.dataset.i === "sil") { if (await onayla(`“${g.ad || "Adsız görev"}” silinsin mi? Silmek istiyor musunuz?`)) { D.gorevler.splice(i2, 1); kaydet(); ciz(); } }
+        else if (b.dataset.i === "yukari" && i2 > 0) { D.gorevler.splice(i2 - 1, 0, D.gorevler.splice(i2, 1)[0]); kaydet(); ciz(); }
+        else if (b.dataset.i === "asagi" && i2 < D.gorevler.length - 1) { D.gorevler.splice(i2 + 1, 0, D.gorevler.splice(i2, 1)[0]); kaydet(); ciz(); }
+        else if (b.dataset.i === "kopya") { D.gorevler.splice(i2 + 1, 0, { ...g, id: yeniId(), ad: g.ad + " (kopya)" }); kaydet(); ciz(); }
+      });
+      l.appendChild(k);
+    });
+  }
+
+  $("ornekler").innerHTML = ORNEKLER.map((o, i) => `<button class="cip" data-o="${i}">+ ${esc(o.ad)}${o.odul ? " 🎁" : ""}${o.gizli ? " ✨" : ""}</button>`).join("");
+  $("ornekler").onclick = (e) => { const b = e.target.closest("button"); if (!b) return; D.gorevler.push(yeniGorev(ORNEKLER[+b.dataset.o])); kaydet(); ciz(); bildir("Örnek eklendi; istediğin gibi değiştir"); };
+  $("ekle").onclick = () => { D.gorevler.push(yeniGorev()); kaydet(); ciz(); const a = $("liste").lastElementChild?.querySelector("input.ad"); a?.focus(); };
+  $("baslik").oninput = (e) => { D.baslik = e.target.value; kaydet(); };
+
+  function disaMetni() {
+    const gorevler = D.gorevler.filter((g) => g.ad.trim() && (g.tip !== "madde" || dolu(g).length)).map((g) => {
+      const o = { id: g.id, ad: g.ad.trim(), tip: g.tip, hedef: g.hedef, gun: g.gun };
+      if (g.aciklama.trim()) o.aciklama = g.aciklama.trim();
+      if (g.isTuru.trim() && TIPLER.find((x) => x.id === g.tip)?.turlu) o.isTuru = g.isTuru.trim();
+      if (g.tip === "madde") { o.maddeler = [...new Set(dolu(g))]; if (g.liste.trim()) o.liste = g.liste.trim(); }
+      if (g.baslangic) o.baslangic = g.baslangic;
+      if (g.tekrar) o.tekrar = true;
+      if (g.gizli) o.gizli = true;
+      if (g.simge) o.simge = g.simge;
+      if (g.odul.trim()) o.odul = g.odul.trim();
+      return o;
+    });
+    return { metin: JSON.stringify({ tur: TUR, surum: 1, ...(D.baslik.trim() ? { baslik: D.baslik.trim() } : {}), gorevler }, null, 1), n: gorevler.length };
+  }
+  const dosyaAdi = () => ((D.baslik || "GOREVLER").replace(/[^A-Za-z0-9ÇĞİÖŞÜçğıöşü _-]/g, "").trim().replace(/\s+/g, "_") || "GOREVLER");
+
+  $("indir").onclick = async () => {
+    const { metin, n } = disaMetni();
+    if (!n) { bildir("Önce adı olan en az bir görev ekle"); return; }
+    if (n < D.gorevler.length) bildir(`${D.gorevler.length - n} eksik görev dosyaya alınmadı`);
+    const claude = window.claude;
+    if (claude && typeof claude.use === "function") {
+      try {
+        const dl = await claude.use("downloads");
+        if (!dl) { bildir("Bu görünümde indirme yok"); return; }
+        await dl.save({ filename: dosyaAdi() + ".samgorev.json", data: metin }); bildir("Dosya kaydedildi; WhatsApp’tan paylaşabilirsin");
+      } catch (e) { if (e && e.code !== "declined") bildir("İndirilemedi"); }
+      return;
+    }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([metin], { type: "application/octet-stream" }));
+    a.download = dosyaAdi() + ".samgorev"; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000); bildir("Dosya indirildi; WhatsApp’tan paylaşabilirsin");
+  };
+
+  // Cekim listesi dosyasindan (.samliste) madde secimi
+  let listeHedef = null, listeVeri = null;
+  function listedenSec(g) { listeHedef = g; $("listeDosya").click(); }
+  function listeCiz() {
+    const k = listeVeri[+$("listeSec").value]; const v = $("listeMaddeler"); v.innerHTML = "";
+    const secili = new Set(dolu(listeHedef).map((x) => x.toLocaleLowerCase("tr")));
+    for (const a of k.adimlar || []) {
+      if (!a || typeof a.aciklama !== "string" || !a.aciklama.trim()) continue;
+      const l = document.createElement("label");
+      l.innerHTML = `<input type="checkbox" ${secili.has(a.aciklama.trim().toLocaleLowerCase("tr")) ? "checked" : ""}> <span></span>`;
+      l.querySelector("span").textContent = a.aciklama.trim(); l.querySelector("input").value = a.aciklama.trim();
+      v.appendChild(l);
+    }
+  }
+  $("listeDosya").onchange = async (e) => {
+    const f = e.target.files?.[0]; e.target.value = ""; if (!f || !listeHedef) return;
+    let d; try { d = JSON.parse(await f.text()); } catch { bildir("Dosya okunamadı"); return; }
+    if (!d || d.tur !== "samcameragps.kategoriler" || !Array.isArray(d.kategoriler) || !d.kategoriler.length) { bildir("Bu bir çekim listesi dosyası değil"); return; }
+    listeVeri = d.kategoriler.filter((k) => k && Array.isArray(k.adimlar));
+    $("listeSec").innerHTML = listeVeri.map((k, i) => `<option value="${i}">${esc(k.ad || "Liste " + (i + 1))} (${k.adimlar.length})</option>`).join("");
+    const on = listeVeri.findIndex((k) => (k.ad || "").toLocaleLowerCase("tr") === listeHedef.liste.trim().toLocaleLowerCase("tr"));
+    $("listeSec").value = String(Math.max(0, on)); listeCiz(); $("listePerde").classList.add("acik");
+  };
+  $("listeSec").onchange = listeCiz;
+  $("listeIptal").onclick = () => $("listePerde").classList.remove("acik");
+  $("listeTamam").onclick = () => {
+    const sec = [...$("listeMaddeler").querySelectorAll("input:checked")].map((x) => x.value);
+    if (!sec.length) { bildir("Madde seçmedin"); return; }
+    const k = listeVeri[+$("listeSec").value];
+    const var_ = new Set(dolu(listeHedef).map((x) => x.toLocaleLowerCase("tr")));
+    listeHedef.maddeler = [...dolu(listeHedef), ...sec.filter((x) => !var_.has(x.toLocaleLowerCase("tr")))];
+    if (!listeHedef.liste.trim() && k.ad) listeHedef.liste = k.ad;
+    $("listePerde").classList.remove("acik"); kaydet(); ciz(); bildir(`${sec.length} madde seçildi`);
+  };
+
+  $("iceAc").onclick = () => $("dosya").click();
+  $("dosya").onchange = async (e) => {
+    const f = e.target.files?.[0]; e.target.value = ""; if (!f) return;
+    let d; try { d = JSON.parse(await f.text()); } catch { bildir("Dosya okunamadı"); return; }
+    if (!d || d.tur !== TUR || !Array.isArray(d.gorevler)) { bildir("Bu bir görev dosyası değil"); return; }
+    let yeni = 0, guncel = 0;
+    for (const x of d.gorevler) {
+      if (!x || typeof x.id !== "string" || typeof x.ad !== "string") continue;
+      const g = yeniGorev(x); g.id = x.id.slice(0, 40);
+      const i = D.gorevler.findIndex((y) => y.id === g.id);
+      if (i >= 0) { D.gorevler[i] = g; guncel++; } else { D.gorevler.push(g); yeni++; }
+    }
+    if (d.baslik && !D.baslik) D.baslik = String(d.baslik).slice(0, 80);
+    kaydet(); ciz(); bildir(`${yeni} görev eklendi, ${guncel} güncellendi`);
+  };
+
+  try { if (localStorage.getItem("samgps.tema") === "koyu") document.documentElement.dataset.tema = "koyu"; } catch {}
+  $("tema").onclick = () => {
+    const yeni = document.documentElement.dataset.tema === "koyu" ? "" : "koyu";
+    document.documentElement.dataset.tema = yeni;
+    try { localStorage.setItem("samgps.tema", yeni); } catch {}
+  };
+  ciz();
+})();
+</script>
+<datalist id="turler"><option value="Bakım"><option value="Arıza"><option value="Montaj"></datalist>
+</body>
+</html>
