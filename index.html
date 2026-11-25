@@ -146,6 +146,7 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
           <li>Geliştiricinin bir sunucusu yoktur; hiçbir veri geliştiriciye gönderilmez.</li>
           <li>İnternet yalnızca damgadaki adresi bulmak için kullanılır ve bu istekte sadece koordinatlar gider. İnternet yoksa uygulama yine çalışır, damgada adres yerine koordinat görünür.</li>
           <li>Reklam yoktur, uygulama içi satın alma yoktur, kullanım takibi yapılmaz.</li>
+          <li>Görevler, rozetler ve istatistikler yalnızca telefonda hesaplanır; kimseyle karşılaştırılmaz, hiçbir yere gönderilmez.</li>
         </ul>
       </section>
 
@@ -175,6 +176,8 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
             <tr><td>Raporlar (PDF, HTML, ZIP)</td><td>Paylaşım için telefonun geçici (önbellek) alanında</td><td>Ara dosyalar hemen silinir; önbelleği Android da gerektiğinde temizler</td></tr>
             <tr><td>Ayar yedeği</td><td>Kayıt klasöründe gizli <code>.ayaryedek</code> dosyası</td><td>Çekim listeleri, şablonlar, iş türleri; uygulama yeniden kurulunca geri yüklenebilsin diye</td></tr>
             <tr><td>Ayarlar, klasör özeti, olay günlüğü</td><td>Uygulamanın telefon içi alanı</td><td>Uygulama kaldırılınca silinir</td></tr>
+            <tr><td>Görevler, rozetler, çekim sayacı</td><td>Uygulamanın telefon içi alanı</td><td>İlerleme yalnızca telefondaki iş kayıtlarından hesaplanır; kimseyle karşılaştırılmaz, sıralama yoktur</td></tr>
+            <tr><td>İş arşivi (istatistikler)</td><td>Uygulamanın telefon içi alanı</td><td>Her işin kısa özeti: tarih, saha adı, iş türü, fotoğraf ve bulgu sayıları. Klasörü silseniz de istatistikleriniz bozulmasın diye tutulur; fotoğraf, bulgu açıklaması, not ve konum içermez</td></tr>
           </tbody>
         </table></div>
         <p>Bu dosyaların hiçbiri geliştiriciye gönderilmez.</p>
@@ -201,6 +204,8 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
       <section id="tr-paylasim"><h2><span class="no">07</span>Paylaşım</h2>
         <p>Raporlar, fotoğraflar, konumlar, çekim listeleri ve yedekler yalnızca siz <b>Paylaş</b> dediğinizde, Android paylaşım ekranından seçtiğiniz uygulamaya (e-posta, mesajlaşma, Drive vb.) gönderilir. Paylaştığınız içerikte klasör/saha adı, konum, damga bilgileri ve cevaplarınız bulunur. Dosya başka bir uygulamaya geçtikten sonra o uygulamanın gizlilik koşulları geçerlidir.</p>
         <p>Çekim listesi dosyası yalnızca liste yapısını (maddeler, sorular, ayarlar) içerir; fotoğraf ya da iş kaydı içermez.</p>
+        <p>Bulgu dosyası (<code>.sambulgu</code>), açık bulguların başka bir telefonda düzeltilebilmesi için hazırlanır ve iş kaydının tamamını (saha bilgileri, cevaplar, notlar; girildiyse personel adı), saha konumunu ve bulguların küçültülmüş fotoğraflarını içerir. Gönderen adı yalnızca siz yazarsanız eklenir. Bu dosyayı yalnızca güvendiğiniz kişilere gönderin.</p>
+        <p>Görev dosyası (<code>.samgorev</code>) yalnızca görev tanımlarını (hedef, süre, ödül) içerir; kişi adı içermez. Tamamlanan görevin kanıt PDF’i yalnızca siz <b>Yöneticiye gönder</b> dediğinizde paylaşılır; görev, dönem, saha adları ve sayılan maddeler/bulgular bulunur, kişi adı (personel) yer almaz.</p>
       </section>
 
       <section id="tr-saklama"><h2><span class="no">08</span>Saklama ve silme</h2>
@@ -209,6 +214,7 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
           <li>Fotoğraf, video ve iş kayıtlarınız siz silene kadar kayıt klasörünüzde kalır. Uygulama içinden klasör ya da dosya silerken her seferinde onay istenir.</li>
           <li>Uygulama kaldırıldığında uygulamanın telefon içi alanındaki ayarlar, özetler ve önbellek silinir; kayıt klasörünüzdeki dosyalar sizin dosyalarınız olduğu için yerinde kalır.</li>
           <li>Rapor hazırlarken oluşan ara dosyalar silinir; paylaşım dosyaları önbellekte durur ve Android tarafından ya da uygulama kaldırılınca temizlenir.</li>
+          <li>Bir klasörü sildiğinizde fotoğraflar ve iş kaydı silinir; istatistikler için tutulan kısa iş özeti (yukarıdaki iş arşivi) uygulamanın alanında kalır ve uygulama kaldırılınca silinir.</li>
         </ul>
       </section>
 
@@ -290,6 +296,7 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
           <li>The developer has no servers; no data is ever sent to the developer.</li>
           <li>The internet is used only to look up the address shown on the stamp, and only coordinates are sent. Without internet the app still works and the stamp shows coordinates instead of an address.</li>
           <li>There are no ads, no in-app purchases and no usage tracking.</li>
+          <li>Tasks, badges and statistics are calculated only on the phone; they are never compared with anyone or sent anywhere.</li>
         </ul>
       </section>
 
@@ -319,6 +326,8 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
             <tr><td>Reports (PDF, HTML, ZIP)</td><td>Phone's temporary (cache) storage for sharing</td><td>Intermediate files are deleted right away; Android also clears the cache when needed</td></tr>
             <tr><td>Settings backup</td><td>Hidden <code>.ayaryedek</code> file in the save folder</td><td>Shot lists, templates, job types; so they can be restored after reinstalling</td></tr>
             <tr><td>Settings, folder index, event log</td><td>App's private storage</td><td>Removed when the app is uninstalled</td></tr>
+            <tr><td>Tasks, badges, capture counter</td><td>App's private storage</td><td>Progress is calculated only from job records on the phone; never compared with anyone, no leaderboard</td></tr>
+            <tr><td>Job archive (statistics)</td><td>App's private storage</td><td>A short summary of each job: date, site name, job type, photo and finding counts. Kept so your statistics stay intact even if you delete a folder; contains no photos, finding descriptions, notes or locations</td></tr>
           </tbody>
         </table></div>
         <p>None of these files are ever sent to the developer.</p>
@@ -345,6 +354,8 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
       <section id="en-sharing"><h2><span class="no">07</span>Sharing</h2>
         <p>Reports, photos, locations, shot lists and backups are sent only when you tap <b>Share</b>, to the app you choose in Android's share sheet (email, messaging, Drive, etc.). Shared content includes folder/site names, locations, stamp details and your answers. Once a file reaches another app, that app's privacy terms apply.</p>
         <p>A shot list file contains only the list structure (items, questions, settings); it contains no photos or job records.</p>
+        <p>A findings file (<code>.sambulgu</code>) is made so open findings can be fixed on another phone. It contains the whole job record (site details, answers, notes; the staff name if one was entered), the site location and reduced-size photos of the findings. A sender name is added only if you type one. Send it only to people you trust.</p>
+        <p>A task file (<code>.samgorev</code>) contains only task definitions (target, duration, reward); it contains no personal names. The proof PDF of a completed task is shared only when you tap <b>Send to manager</b>; it contains the task, period, site names and counted items/findings, but no personal (staff) names.</p>
       </section>
 
       <section id="en-retention"><h2><span class="no">08</span>Retention and deletion</h2>
@@ -353,6 +364,7 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
           <li>Your photos, videos and job records stay in your save folder until you delete them. Deleting folders or files inside the app always asks for confirmation.</li>
           <li>Uninstalling the app removes the settings and indexes in its private storage; files in your save folder are your own and stay where they are.</li>
           <li>Intermediate files created while preparing reports are deleted; share files stay in the cache until Android clears it or the app is uninstalled.</li>
+          <li>When you delete a folder, its photos and job record are deleted; the short job summary kept for statistics (the job archive above) stays in the app's storage and is removed when the app is uninstalled.</li>
         </ul>
       </section>
 
@@ -395,8 +407,8 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
 <footer>
   <div class="kap">
     <span>SAM Camera GPS · <span lang="tr">Gizlilik Politikası</span><span lang="en">Privacy Policy</span></span>
-    <span><span lang="tr">Son güncelleme: 24 Kasım 2026</span><span lang="en">Last updated: 24 November 2026</span></span>
-    <a href="SamCameraGps.html"><span lang="tr">Tanıtım sayfası</span><span lang="en">Product page</span></a>
+    <span><span lang="tr">Son güncelleme: 26 Kasım 2026</span><span lang="en">Last updated: 26 November 2026</span></span>
+    <a href="https://rkckglu.github.io/SamCameraGps/SamCameraGps.html"><span lang="tr">Tanıtım sayfası</span><span lang="en">Product page</span></a>
     <span class="rk">R.K.</span>
   </div>
 </footer>
@@ -419,7 +431,6 @@ footer .rk{margin-left:auto;font-weight:800;color:var(--metin)}
     document.querySelectorAll("button[data-tema]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tema === t)));
     sakla("samgps-tema", t);
   }
-  // Varsayilan: Turkce, koyu. ?lang=en adresi ya da daha once secilen.
   dilSec(new URLSearchParams(location.search).get("lang") || oku("samgps-dil") || "tr");
   temaSec(oku("samgps-tema") || "koyu");
   document.querySelectorAll("button[data-dil]").forEach((b) => b.addEventListener("click", () => dilSec(b.dataset.dil)));
