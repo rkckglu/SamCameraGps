@@ -2,12 +2,13 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<!-- SAM Camera GPS yonetici araci (herkese acik kopya). Hicbir veri gonderilmez; her sey bu tarayicida kalir. Kaynak: araclar/cekim-listesi.html -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Çekim Listesi Hazırlayıcı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-/* SAM Camera GPS cekim listesi hazirlayici. Uygulamanin logosundaki lacivert + sari.
-   Duzen: solda saha tipleri, sagda secili saha tipinin maddeleri (satir satir, klavyeyle hizli). */
+
 :root {
   --zemin: #EEF1F5;
   --yuzey: #FFFFFF;
@@ -84,7 +85,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
 .cip { font-size: 12.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--yuzey2); border: 1px solid var(--cizgi); font-variant-numeric: tabular-nums; }
 .cip.uyari { color: var(--uyari); border-color: var(--uyari); }
 
-/* Ornek (hayalet) fotograf */
 .ornek { display: inline-flex; align-items: center; gap: 6px; }
 .ornek img { width: 36px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid var(--cizgi); cursor: pointer; background: #000; }
 .ornek .x { border: 0; background: none; color: var(--solgun); font-size: 15px; padding: 0 2px; }
@@ -92,7 +92,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
 .not-foto { font-size: 12.5px; color: var(--solgun); }
 .secenek.foto { align-items: flex-start; }
 
-/* Saha bilgileri */
 .turlar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .turlar .et { font-size: 12.5px; color: var(--solgun); font-weight: 700; margin-right: 2px; }
 .turcip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px; border-radius: 15px; border: 1.5px solid var(--cizgi); background: var(--yuzey); color: var(--metin); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -116,7 +115,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
 .ssatir input.bos { border-color: var(--uyari); }
 .saha .kb { justify-self: start; padding: 6px 12px; }
 
-/* Maddeler */
 .liste { display: grid; gap: 6px; }
 .uyari { display: flex; align-items: center; gap: 8px; margin-top: 6px; border: 1.5px solid #F59E0B; border-radius: 8px; padding: 2px 4px 2px 9px; background: color-mix(in srgb, #FBBF24 12%, var(--yuzey)); }
 .uyari input { flex: 1; border: none; background: none; font: inherit; font-size: 13.5px; padding: 5px 2px; color: var(--metin); outline: none; }
@@ -154,7 +152,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
 .ekle-alt { display: flex; gap: 8px; flex-wrap: wrap; }
 .ekle-alt .kb { flex: 1; text-align: center; }
 
-/* Pencere */
 .perde { position: fixed; inset: 0; background: rgba(8,14,26,.55); display: none; place-items: center; padding: 16px; z-index: 20; }
 .perde.acik { display: grid; }
 .pencere { background: var(--yuzey); border: 1px solid var(--cizgi); border-radius: 16px; padding: 18px; width: min(560px, 100%); display: grid; gap: 12px; max-height: 90vh; overflow: auto; }
@@ -205,6 +202,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
   <button class="ub" id="geriAl" title="Geri al (Ctrl+Z)" disabled>↶ Geri al</button>
   <button class="ub" id="iceAc">İçe aktar</button>
   <button class="ub" id="tema">Açık / koyu</button>
+  <button class="ub" id="taslakSil" title="Bu tarayıcıdaki taslağı siler ve boş sayfayla başlar">Taslağı temizle</button>
   <button class="ub ana" id="disaAc">Uygulamaya aktar</button>
 </header>
 
@@ -298,7 +296,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
 
   const yeniAdim = (aciklama = "") => ({ id: yeniAdimId(), aciklama, istege: false, atlanamaz: false, soruTuru: "yok", soru: "", hayirAtla: [], evetAtla: [] });
 
-  // ---------- Is turleri (uygulamadaki gibi: Bakim, Ariza, Montaj hazir; yenileri eklenir) ----------
   const VARS_TURLER = [
     { id: "bakim", ad: "Bakım", simge: "construct", renk: "#3B82F6" },
     { id: "ariza", ad: "Arıza", simge: "flash", renk: "#EF4444" },
@@ -306,10 +303,9 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
   ];
   const SIMGELER = ["construct", "flash", "hammer", "search", "build", "water", "flame", "leaf", "car", "home", "cube", "shield-checkmark", "clipboard", "camera"];
   const RENKLER = ["#3B82F6", "#EF4444", "#10B981", "#F59E0B", "#8B5CF6", "#EC4899", "#14B8A6", "#64748B"];
-  // Saha tipinin turleri: yoksa (eski liste) Bakim; silinmis turler atlanir.
+  
   const tipTurleri = (k) => { const l = (k.isTurleri || []).filter((id) => D.turler.some((x) => x.id === id)); return l.length ? l : [D.turler.some((x) => x.id === "bakim") ? "bakim" : D.turler[0].id]; };
 
-  // ---------- Durum ----------
   function ornek() {
     const a = (aciklama, ek = {}) => ({ ...yeniAdim(aciklama), ...ek });
     const m = [
@@ -342,7 +338,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     if (yeni === sonAnlik) return;
     if (geriAlinabilir) {
       gecmis.push(sonAnlik);
-      // Fotograflar buyuk: geri alma gecmisi ~40 MB'yi gecmesin.
+     
       let top = gecmis.reduce((n, x) => n + x.length, 0);
       while (gecmis.length > 60 || (gecmis.length > 3 && top > 40e6)) top -= gecmis.shift().length;
     }
@@ -351,7 +347,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     try { localStorage.setItem(KAYIT, yeni); sigmadi = false; }
     catch { if (!sigmadi) bildir("Taslak tarayıcıya sığmadı (fotoğraflar büyük): sayfayı kapatmadan Dosya indir'i kullan"); sigmadi = true; }
   }
-  // Yazarken her tus vurusu ayri geri alma adimi olmasin: 700 ms sessizlikte bir anlik.
   let yaziZaman = null;
   function yaziKaydet() { clearTimeout(yaziZaman); yaziZaman = setTimeout(() => kaydet(), 700); }
   function geriAl() {
@@ -364,7 +359,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
   }
   const tip = () => D.tipler[D.secili];
 
-  // ---------- Bildirim / onay ----------
   let bz;
   function bildir(m) { const b = $("bildirim"); b.textContent = m; b.classList.add("gor"); clearTimeout(bz); bz = setTimeout(() => b.classList.remove("gor"), 2200); }
   function onayla(metin) {
@@ -379,8 +373,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") document.querySelectorAll(".perde.acik").forEach((p) => p.classList.remove("acik")); });
   document.querySelectorAll(".perde").forEach((p) => p.addEventListener("click", (e) => { if (e.target === p) p.classList.remove("acik"); }));
 
-  // ---------- Saha tipleri ----------
-  // Saha tipleri: tikla sec; ↑ ↓ dugmeleri, Alt+↑↓ ya da ⋮⋮ ile surukleyerek sira degisir (uygulamaya bu sirayla gider).
   function cizTipler() {
     const n = D.tipler.length;
     $("tipler").innerHTML = D.tipler.map((t, i) =>
@@ -424,6 +416,12 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     D.secili = D.tipler.indexOf(secili); tipSur = -1; tipHedefTemizle(); kaydet(); cizTipler();
   });
   $("tipler").addEventListener("dragend", () => { tipSur = -1; tipHedefTemizle(); document.querySelectorAll(".tipsatir.surukle").forEach((x) => x.classList.remove("surukle")); });
+  
+  $("taslakSil").onclick = async () => {
+    if (!(await onayla("Bu tarayıcıdaki taslak (bütün saha tipleri ve maddeler) silinecek. Silmek istiyor musunuz? İndirdiğiniz .samliste dosyaları etkilenmez; hemen ardından “Geri al” ile geri alabilirsiniz."))) return;
+    D = { tipler: [{ id: yeniKatId(), ad: "YENİ SAHA TİPİ", adimlar: [yeniAdim()], sahaSorulari: [], isTurleri: ["bakim"] }], secili: 0, turler: VARS_TURLER.map((x) => ({ ...x })) };
+    kaydet(); cizHepsi(); bildir("Taslak temizlendi");
+  };
   $("tipEkle").onclick = () => { D.tipler.push({ id: yeniKatId(), ad: "YENİ SAHA TİPİ", adimlar: [yeniAdim()] }); D.secili = D.tipler.length - 1; kaydet(); cizHepsi(); $("tipAd").select(); $("tipAd").focus(); };
   $("tipAd").addEventListener("input", (e) => { tip().ad = buyuk(e.target.value).slice(0, S.KAT); cizTipler(); yaziKaydet(); });
   $("tipAd").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); odakla(0); } });
@@ -442,14 +440,12 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     D.secili = Math.max(0, D.secili - 1); kaydet(); cizHepsi();
   };
 
-  // ---------- Kosullar: "2-3, 5" <-> id listesi ----------
   function noMetni(idler, adimlar) {
     const n = idler.map((id) => adimlar.findIndex((a) => a.id === id) + 1).filter((x) => x > 0).sort((a, b) => a - b);
     return [...new Set(n)].join(",");
   }
   function noCoz(metin, adimlar, kendiIndeks) {
     const s = new Set();
-    // "2,3,4" ya da aralik "4-7" (karisik da olur: "2,4-7,9"); bosluk, nokta ve noktali virgul de ayirir.
     for (const par of metin.split(/[,;.\s]+/)) {
       const sayilar = par.split(/[-–]+/).map((x) => parseInt(x, 10)).filter((x) => Number.isFinite(x));
       if (!sayilar.length) continue;
@@ -458,14 +454,12 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     }
     return [...s];
   }
-  // Hangi madde(ler) bu maddeyi atlatabilir?
   function atlatanlar(adimlar, id) {
     const r = [];
     adimlar.forEach((a, i) => { if (a.soruTuru !== "evetHayir") return; if (a.hayirAtla.includes(id)) r.push(i + 1 + " Hayır"); if (a.evetAtla.includes(id)) r.push(i + 1 + " Evet"); });
     return r;
   }
 
-  // ---------- Maddeler ----------
   const IKON = {
     yukari: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
     asagi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>',
@@ -476,7 +470,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     const ad = tip().adimlar;
     $("liste").innerHTML = ad.map((a, i) => {
       const bolum = a.bolum !== undefined
-        ? `<div class="bolum" data-i="${i}"><input data-a="bolum" value="${kac(a.bolum)}" maxlength="${S.BOLUM}" placeholder="BÖLÜM BAŞLIĞI (örn. SAHA İÇİ)" aria-label="Bölüm başlığı"><button class="ib sil" data-a="bolumSil" title="Başlığı kaldır">${IKON.sil}</button></div>` : "";
+        ? `<div class="bolum" data-i="${i}"><input data-a="bolum" value="${kac(a.bolum)}" maxlength="${S.BOLUM}" placeholder="BÖLÜM BAŞLIĞI (örn. SAHA İÇİ)" aria-label="Bölüm başlığı"><button class="ib" data-a="bolumYukari" title="Başlığı bir madde yukarı taşı" ${i === 0 ? "disabled" : ""}>↑</button><button class="ib" data-a="bolumAsagi" title="Başlığı bir madde aşağı taşı" ${i >= ad.length - 1 ? "disabled" : ""}>↓</button><button class="ib sil" data-a="bolumSil" title="Başlığı kaldır">${IKON.sil}</button></div>` : "";
       const sonraki = ad.length - i - 1;
       const kosul = a.soruTuru === "evetHayir" && sonraki > 0
         ? `<div class="kosul"><span class="e">Evet</span> ise atla <input data-a="evetAtla" value="${kac(noMetni(a.evetAtla, ad))}" placeholder="örn. ${[i + 2, i + 3].filter((x) => x <= ad.length).join(",")}" aria-label="Evet ise atlanacak madde numaraları"><span class="h">Hayır</span> ise atla <input data-a="hayirAtla" value="${kac(noMetni(a.hayirAtla, ad))}" placeholder="örn. ${i + 2}" aria-label="Hayır ise atlanacak madde numaraları"></div>` : "";
@@ -494,6 +488,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
             <button class="bayrak" data-a="istege" aria-pressed="${a.istege}">İsteğe bağlı</button>
             <button class="bayrak" data-a="atlanamaz" aria-pressed="${a.atlanamaz}">Atlanamaz</button>
             <button class="bayrak" data-a="galeriYok" aria-pressed="${!!a.galeriYok}" title="Bu maddeye galeriden fotoğraf eklenemez; yalnız kamerayla çekilir">Galeri kapalı</button>
+            ${a.soruTuru === "evetHayir" && a.sorunluCevap !== "yok" ? `<button class="bayrak" data-a="bco" aria-pressed="${!!a.bco}" title="Bulguya düşünce BCO (bölge çözüm ortağı) tespiti açılabilir">BCO açılabilir</button>` : ""}
             ${a.bolum === undefined ? `<button class="bayrak" data-a="bolumEkle">＋ Başlık</button>` : ""}
             ${a.uyari === undefined ? `<button class="bayrak" data-a="uyariEkle" title="Çekimde bu maddeye gelince ekranda kayarak gösterilir (6 sn)">⚠ Uyarı notu</button>` : ""}
             ${a.ornek
@@ -532,12 +527,11 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
       soruBos ? `<span class="cip uyari">${soruBos} sorunun metni yok</span>` : "",
     ].join("");
   }
-  // ---------- Saha bilgileri: bakim baslarken fotograflardan once sorulan sorular ----------
   const SAHA_SORU = 120;
   const yeniSahaSorusu = () => ({ id: "saha_" + Date.now() + "_" + rast(), soru: "", zorunlu: false });
   function cizSaha() {
     const l = tip().sahaSorulari || [];
-    // Saha tipi birden cok ture bagliysa her soruda "hangi islerde sorulsun" cipleri (hepsi secili = kisit yok).
+   
     const tt = tipTurleri(tip()).map((id) => D.turler.find((x) => x.id === id));
     const turSatiri = (q, i) => tt.length < 2 ? "" : `<div class="sturler">Sorulacağı işler:${tt.map((x) => {
       const sec = !(q.isTurleri && q.isTurleri.length) || q.isTurleri.includes(x.id);
@@ -584,7 +578,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     kaydet(); cizSaha();
   });
 
-  // Saha tipinin bagli oldugu is turleri: tikla ac/kapa (en az biri kalir). Ayni saha hem bakimda hem arizada kullanilabilir.
   function cizTurler() {
     const sec = tipTurleri(tip());
     $("turlar").innerHTML = `<span class="et">İş türleri:</span>` + D.turler.map((x) => {
@@ -632,7 +625,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     [ad[i], ad[j]] = [ad[j], ad[i]]; kosullariTemizle(ad); kaydet(); cizListe(); cizTipler(); odakla(j);
   }
   function araya(i, aciklama = "") { tip().adimlar.splice(i + 1, 0, yeniAdim(aciklama)); kaydet(); cizListe(); cizTipler(); odakla(i + 1); }
-  // Uygulamadaki kural: kosul yalnizca kendinden SONRAKI ve var olan maddeleri, yalnizca Evet/Hayir'da.
+  
   function kosullariTemizle(ad) {
     ad.forEach((a, i) => {
       const sonra = new Set(ad.slice(i + 1).map((x) => x.id));
@@ -681,8 +674,17 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     else if (ne === "istege") { a.istege = !a.istege; if (a.istege) a.atlanamaz = false; kaydet(); cizListe(); }
     else if (ne === "atlanamaz") { a.atlanamaz = !a.atlanamaz; if (a.atlanamaz) a.istege = false; kaydet(); cizListe(); }
     else if (ne === "galeriYok") { if (a.galeriYok) delete a.galeriYok; else a.galeriYok = true; kaydet(); cizListe(); }
+    else if (ne === "bco") { if (a.bco) delete a.bco; else a.bco = true; kaydet(); cizListe(); }
     else if (ne === "bolumEkle") { a.bolum = ""; kaydet(); cizListe(); requestAnimationFrame(() => document.querySelector(`.bolum[data-i="${i}"] input`)?.focus()); }
     else if (ne === "bolumSil") { delete a.bolum; kaydet(); cizListe(); }
+    else if (ne === "bolumYukari" || ne === "bolumAsagi") {
+      // Baslik bir madde yukari/asagi kayar (maddeler yerinde kalir); oradaki baslikla yer degistirir.
+      const j = i + (ne === "bolumYukari" ? -1 : 1); if (j < 0 || j >= ad.length) return;
+      const b = a.bolum; const k = ad[j].bolum;
+      if (k === undefined) delete a.bolum; else a.bolum = k;
+      ad[j].bolum = b;
+      kaydet(); cizListe(); requestAnimationFrame(() => document.querySelector(`.bolum[data-i="${j}"] [data-a="${ne}"]`)?.focus());
+    }
     else if (ne === "uyariEkle") { a.uyari = ""; kaydet(); cizListe(); requestAnimationFrame(() => document.querySelector(`.satir[data-i="${i}"] .uyari input`)?.focus()); }
     else if (ne === "uyariSil") { delete a.uyari; kaydet(); cizListe(); }
     else if (ne === "ornekSec") { ornekHedef = i; $("ornekDosya").click(); }
@@ -709,17 +711,10 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
       }
       return araya(i);
     }
-    if (e.key === "Backspace" && el.dataset.a === "aciklama" && !el.value && ad.length > 1 && ad[i].soruTuru === "yok") {
-      e.preventDefault();
-      if (ad[i].bolum !== undefined && ad[i + 1] && ad[i + 1].bolum === undefined) ad[i + 1].bolum = ad[i].bolum;
-      ad.splice(i, 1); kosullariTemizle(ad); kaydet(); cizListe(); cizTipler(); odakla(Math.max(0, i - 1));
-      return;
-    }
     if (e.altKey && (e.key === "ArrowUp" || e.key === "ArrowDown")) { e.preventDefault(); clearTimeout(yaziZaman); tasi(i, e.key === "ArrowUp" ? -1 : 1); return; }
     if (!e.altKey && (e.key === "ArrowUp" || e.key === "ArrowDown") && el.dataset.a === "aciklama") { e.preventDefault(); odakla(i + (e.key === "ArrowUp" ? -1 : 1)); }
   });
 
-  // Surukle-birak siralama
   let surIndeks = -1;
   L.addEventListener("dragstart", (e) => {
     const t = e.target.closest?.(".tut"); if (!t) { e.preventDefault(); return; }
@@ -739,7 +734,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
   });
   L.addEventListener("dragend", () => { surIndeks = -1; hedefTemizle(); document.querySelectorAll(".surukle").forEach((x) => x.classList.remove("surukle")); });
 
-  // ---------- Ornek (hayalet) fotograf: bilgisayardan secilir, sayfada kucultulur ----------
   let ornekHedef = -1;
   function resimKucult(dosya) {
     return new Promise((coz, red) => {
@@ -767,11 +761,10 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     requestAnimationFrame(() => { const el = document.querySelector(`.bolum[data-i="${ad.length - 1}"] input`); el?.focus(); el?.scrollIntoView({ block: "nearest" }); });
   };
 
-  // ---------- Disa aktarma (uygulamanin bicimi) ----------
   function disaMetni(tipler, fotolu = false) {
     const ornekler = {};
     const kategoriler = tipler.map((k) => {
-      // Bos maddeler atilir; bos maddenin basligi sonrakine gecer (uygulamadaki kural).
+     
       const ad = []; let bekleyen;
       for (const a of k.adimlar) {
         if (!a.aciklama.trim()) { if (a.bolum && a.bolum.trim()) bekleyen = a.bolum; continue; }
@@ -784,12 +777,13 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
         if (a.soruTuru === "evetHayir" && (a.fotoCevap === "evet" || a.fotoCevap === "hayir")) o.fotoCevap = a.fotoCevap;
         if (a.soruTuru === "evetHayir" && a.sorunluCevap !== "yok" && typeof a.puan === "number" && Number.isFinite(a.puan)) o.puan = a.puan;
         if (a.galeriYok) o.galeriYok = true;
+        if (a.bco && a.soruTuru === "evetHayir" && a.sorunluCevap !== "yok") o.bco = true;
         if (a.soruTuru === "olcum") {
           if (a.birim) o.birim = a.birim;
           let en = a.enAz, ek = a.enCok; if (en !== undefined && ek !== undefined && en > ek) [en, ek] = [ek, en];
           if (en !== undefined) o.enAz = en; if (ek !== undefined) o.enCok = ek;
         }
-        // Yalniz cekim listesine eklenmis ornek fotograf (uygulamadaki bicim: "ornek:<ad>" + ust "ornekler").
+        
         if (fotolu && a.ornek) { const ad = a.id + ".jpg"; ornekler[ad] = a.ornek; o.ornekUri = "ornek:" + ad; }
         ad.push(o);
       }
@@ -800,7 +794,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
       });
       return { id: k.id, ad: buyuk(k.ad.trim() || "ADSIZ").slice(0, S.KAT), adimlar: ad, ...(saha.length ? { sahaSorulari: saha } : {}), isTurleri: tipTurleri(k) };
     });
-    // Kullanilan is turlerinin tanimlari: telefonda yoksa olusur (ayni ad varsa onunla eslesir).
+    
     const kullanilan = new Set(kategoriler.flatMap((k) => k.isTurleri));
     const isTurleri = D.turler.filter((x) => kullanilan.has(x.id));
     if (Object.keys(ornekler).length) return JSON.stringify({ tur: DOSYA_TURU, surum: 1, kategoriler, isTurleri, ornekler });
@@ -824,7 +818,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     const m = disaMetni(kapsam());
     try { await navigator.clipboard.writeText(m); bildir("Kopyalandı. Telefonda Panodan içe aktar."); }
     catch {
-      // Pano izni yoksa metni sec, kullanici kopyalasin.
+     
       $("iceMetin").value = m; kapat("disaPerde"); ac("icePerde"); $("iceMetin").select(); bildir("Seçili metni Ctrl+C ile kopyala");
     }
   };
@@ -834,7 +828,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     const m = disaMetni(kapsam(), fotolu);
     const claude = window.claude;
     if (claude && typeof claude.use === "function") {
-      // Yayinlanmis sayfa: dosya indirme izni ile (.samliste uzantisina izin yok; .json uygulamada da acilir).
+     
       try {
         const dl = await claude.use("downloads");
         if (!dl) { bildir("Bu görünümde indirme yok; Kopyala'yı kullan"); return; }
@@ -849,7 +843,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     setTimeout(() => URL.revokeObjectURL(a.href), 4000); bildir("Dosya indirildi");
   };
 
-  // ---------- Ice aktarma ----------
   function iceAl(metin) {
     let d; try { d = JSON.parse(metin); } catch { bildir("Metin okunamadı: SAM Camera GPS listesi değil"); return false; }
     const ham = d && d.tur === DOSYA_TURU ? d.kategoriler : d && d.tur === "samcamera.cekimListesi" ? d.listeler : null;
@@ -879,6 +872,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
         if (tur === "evetHayir" && (a.fotoCevap === "evet" || a.fotoCevap === "hayir")) o.fotoCevap = a.fotoCevap;
         if (tur === "evetHayir" && typeof a.puan === "number" && Number.isFinite(a.puan) && a.puan >= 0) o.puan = Math.round(a.puan * 100) / 100;
         if (a.galeriYok === true) o.galeriYok = true;
+        if (a.bco === true && tur === "evetHayir") o.bco = true;
         if (tur === "olcum") {
           if (typeof a.birim === "string" && a.birim.trim()) o.birim = a.birim.trim().slice(0, 12);
           if (typeof a.enAz === "number" && Number.isFinite(a.enAz)) o.enAz = a.enAz;
@@ -899,7 +893,7 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
       if (i >= 0) { D.tipler[i] = yeni; guncellenen++; } else { D.tipler.push(yeni); eklenen++; }
     }
     if (!eklenen && !guncellenen) { bildir("İçinde saha tipi yok"); return false; }
-    // Ilk acilistaki ornek dokunulmadan kaldiysa at.
+    
     kaydet(); cizHepsi(); bildir(`${eklenen} eklendi, ${guncellenen} güncellendi`); return true;
   }
   $("iceAc").onclick = () => { $("iceMetin").value = ""; ac("icePerde"); };
@@ -916,8 +910,6 @@ section.panel { padding: 14px 16px 16px; display: grid; gap: 12px; min-width: 0;
     const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (!f) return; e.preventDefault(); dosyaOku(f);
   });
 
-  // ---------- Tema, kisayollar ----------
-  // Varsayilan gunduz modu; koyu yalnizca dugmeyle (secim bu tarayicida hatirlanir).
   try { if (localStorage.getItem("samgps.tema") === "koyu") document.documentElement.dataset.tema = "koyu"; } catch {}
   $("tema").onclick = () => {
     const yeni = document.documentElement.dataset.tema === "koyu" ? "acik" : "koyu";
